@@ -16,25 +16,25 @@ class Player extends Entity {
         velocity = new Vector2(0, 0);
         setHitbox(16, 16);
 
-        sprite = new Spritemap("graphics/player.png", 16, 16);
-        sprite.add("idle", [0]);
+        sprite = new Spritemap('graphics/player.png', 16, 16);
+        sprite.add('idle', [0]);
         graphic = sprite;
     }
 
     override public function update() {
-        if(Main.inputCheck("up")) {
+        if(Main.inputCheck('up')) {
             velocity.y = -SPEED;
         }
-        else if(Main.inputCheck("down")) {
+        else if(Main.inputCheck('down')) {
             velocity.y = SPEED;
         }
         else {
             velocity.y = 0;
         }
-        if(Main.inputCheck("left")) {
+        if(Main.inputCheck('left')) {
             velocity.x = -SPEED;
         }
-        else if(Main.inputCheck("right")) {
+        else if(Main.inputCheck('right')) {
             velocity.x = SPEED;
         }
         else {
@@ -43,7 +43,7 @@ class Player extends Entity {
         moveBy(
             velocity.x * Main.getDelta(),
             velocity.y * Main.getDelta(),
-            "walls"
+            'walls'
         );
 
         // Don't let the player leave the screen
