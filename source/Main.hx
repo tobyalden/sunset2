@@ -1,8 +1,8 @@
-import haxepunk.Engine;
-import haxepunk.HXP;
-import scenes.*;
+import haxepunk.*;
+import haxepunk.debug.Console;
 import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
+import scenes.*;
 
 class Main extends Engine
 {
@@ -18,6 +18,9 @@ class Main extends Engine
     }
 
     override public function init() {
+#if debug
+        Console.enable();
+#end
         Key.define("left", [Key.LEFT, Key.A]);
         Key.define("right", [Key.RIGHT, Key.D]);
         Key.define("up", [Key.UP, Key.W]);
