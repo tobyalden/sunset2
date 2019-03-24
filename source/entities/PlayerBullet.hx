@@ -35,7 +35,11 @@ class PlayerBullet extends Entity {
             velocity.x * Main.getDelta(),
             velocity.y * Main.getDelta()
         );
-        if(y < 0 - height) {
+        if(
+            x < -width || x > HXP.width
+            || y < -height || y > HXP.height
+        ) {
+            // Remove offscreen bullets
             scene.remove(this);
         }
         var enemy = collide("enemy", x, y);

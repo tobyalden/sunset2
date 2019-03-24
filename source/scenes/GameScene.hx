@@ -40,7 +40,7 @@ class GameScene extends Scene
     }
 
     private function sendWave() {
-        add(new Rock(
+        add(new Cactus(
             Std.int(16 + Math.random() * (HXP.width - 32)), -16
         ));
     }

@@ -38,7 +38,8 @@ class Enemy extends Entity {
             graphic.color = 0xFFFFFF;
             visible = true;
         }
-        if(y > HXP.height) {
+        if(x < -width || x > HXP.width || y > HXP.height) {
+            // Remove offscreen enemies
             scene.remove(this);
         }
         super.update();
