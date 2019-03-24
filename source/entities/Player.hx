@@ -45,6 +45,13 @@ class Player extends Entity {
             velocity.y * Main.getDelta(),
             "walls"
         );
+
+        // Don't let the player leave the screen
+        x = Math.max(x, 0);
+        x = Math.min(x, HXP.width - width);
+        y = Math.max(y, 0);
+        y = Math.min(y, HXP.height - height);
+
         super.update();
     }
 }
