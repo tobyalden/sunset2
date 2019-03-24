@@ -3,12 +3,17 @@ package entities;
 import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.math.*;
+import haxepunk.Tween;
+import haxepunk.tweens.misc.*;
 
 class Player extends Entity {
     public static inline var SPEED = 0.1;
+    public static inline var SHOT_COOLDOWN = 0.1;
 
     private var velocity:Vector2;
     private var sprite:Spritemap;
+    private var shotCooldown:Alarm;
+    private var sfx:Map<String, Sfx>;
 
     public function new(x:Int, y:Int) {
         super(x, y);
@@ -19,9 +24,24 @@ class Player extends Entity {
         sprite = new Spritemap('graphics/player.png', 16, 16);
         sprite.add('idle', [0]);
         graphic = sprite;
+
+        shotCooldown = new Alarm(SHOT_COOLDOWN, TweenType.Persist);
+        addTween(shotCooldown);
+
+        sfx = [
+            'shoot1' => new Sfx('audio/shoot1.wav'),
+            'shoot2' => new Sfx('audio/shoot2.wav'),
+            'shoot3' => new Sfx('audio/shoot3.wav')
+        ];
     }
 
     override public function update() {
+        movement();
+        shooting();
+        super.update();
+    }
+
+    private function movement() {
         if(Main.inputCheck('up')) {
             velocity.y = -SPEED;
         }
@@ -42,8 +62,7 @@ class Player extends Entity {
         }
         moveBy(
             velocity.x * Main.getDelta(),
-            velocity.y * Main.getDelta(),
-            'walls'
+            velocity.y * Main.getDelta()
         );
 
         // Don't let the player leave the screen
@@ -51,7 +70,15 @@ class Player extends Entity {
         x = Math.min(x, HXP.width - width);
         y = Math.max(y, 0);
         y = Math.min(y, HXP.height - height);
+    }
 
-        super.update();
+    private function shooting() {
+        if(Main.inputCheck('shoot')) {
+            if(!shotCooldown.active) {
+                scene.add(new PlayerBullet(this));
+                shotCooldown.start();
+                sfx['shoot${HXP.choose(1, 2, 3)}'].play();
+            }
+        }
     }
 }

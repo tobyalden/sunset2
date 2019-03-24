@@ -15,6 +15,7 @@ class GameScene extends Scene
         background = new Entity(
             0, 0, new Backdrop('graphics/background.png')
         );
+        background.layer = 10;
         add(background);
         player = new Player(100, 100);
         add(player);
