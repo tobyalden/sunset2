@@ -4,30 +4,23 @@ import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.masks.*;
 import haxepunk.math.*;
+import haxepunk.Tween;
+import haxepunk.tweens.misc.*;
 
-class PlayerBullet extends Entity {
-    public static inline var SPEED = 0.3;
+class Enemy extends Entity {
+    public static inline var FLICKER_DURATION = 0.2;
+    public static inline var FLICKER_SPEED = 0.05;
 
     private var velocity:Vector2;
-    private var sprite:Image;
-    private var sfx:Map<String, Sfx>;
+    private var health:Int;
+    private var flickerTimer:Alarm;
 
-    public function new(player:Player) {
-        mask = new Hitbox(8, 16);
-        super(player.x + player.width / 2 - width / 2, player.y);
-        type = "playerbullet";
-
-        velocity = new Vector2(0, -SPEED);
-
-        sprite = new Image('graphics/playerbullet.png');
-        graphic = sprite;
-        layer = 1;
-
-        sfx = [
-            'hit1' => new Sfx('audio/bullethit1.wav'),
-            'hit2' => new Sfx('audio/bullethit2.wav'),
-            'hit3' => new Sfx('audio/bullethit3.wav')
-        ];
+    public function new(x:Int, y:Int) {
+        super(x, y);
+        type = "enemy";
+        velocity = new Vector2(0, 0);
+        flickerTimer = new Alarm(FLICKER_DURATION, TweenType.Persist);
+        addTween(flickerTimer);
     }
 
     override public function update() {
@@ -35,21 +28,33 @@ class PlayerBullet extends Entity {
             velocity.x * Main.getDelta(),
             velocity.y * Main.getDelta()
         );
-        if(y < 0 - height) {
-            scene.remove(this);
+        if(flickerTimer.active) {
+            graphic.color = 0xFF0000;
+            visible = Math.floor(
+                flickerTimer.elapsed / FLICKER_SPEED
+            ) % 2 == 0;
         }
-        var enemy = collide("enemy", x, y);
-        if(enemy != null) {
-            cast(enemy, Enemy).takeHit();
-            die();
+        else {
+            graphic.color = 0xFFFFFF;
+            visible = true;
+        }
+        if(y > HXP.height) {
+            scene.remove(this);
         }
         super.update();
     }
 
-    public function die() {
-        sfx['hit${HXP.choose(1, 2, 3)}'].play();
-        explode(2);
-        scene.remove(this);
+    public function takeHit() {
+        health -= 1;
+        flickerTimer.start();
+        if(health < 0) {
+            die();
+        }
+    }
+
+    private function die() {
+        explode(4);
+        scene.remove(this); 
     }
 
     private function explode(numExplosions:Int) {
@@ -76,7 +81,7 @@ class PlayerBullet extends Entity {
                 Math.max(0.1 + 0.2 * Math.random(), direction.length)
             );
             var explosion = new Explosion(
-                centerX, centerY, directions[count], true
+                centerX, centerY, directions[count]
             );
             explosion.layer = -99;
             scene.add(explosion);
