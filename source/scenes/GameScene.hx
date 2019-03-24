@@ -1,12 +1,11 @@
 package scenes;
 
-import haxepunk.Scene;
+import haxepunk.*;
+import entities.*;
 
 class GameScene extends Scene
 {
-	override public function begin()
-	{
-		// Insert your scene code here...
-
-	}
+    override public function begin() {
+        add(new Player(100, 100));
+    }
 }
