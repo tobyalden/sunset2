@@ -19,6 +19,7 @@ class Spinner extends Enemy {
     private var dropDistance:Float;
     private var shotCooldown:Alarm;
     private var shotAngle:Float;
+    private var clockwise:Bool;
 
     public function new(x:Int, y:Int) {
         super(x, y);
@@ -37,6 +38,7 @@ class Spinner extends Enemy {
             shoot();
         });
         addTween(shotCooldown);
+        clockwise = HXP.choose(true, false);
     }
 
     override public function update() {
@@ -48,10 +50,19 @@ class Spinner extends Enemy {
                 shotCooldown.start();
             }
             velocity.y = 0;
-            sprite.angle = -shotAngle * 57.2958;
-            shotAngle += SPIN_SPEED * Main.getDelta();
-            if(shotAngle > Math.PI * 2) {
-                shotAngle -= Math.PI * 2;
+            if(clockwise) {
+                sprite.angle = -shotAngle * 57.2958;
+                shotAngle += SPIN_SPEED * Main.getDelta();
+                if(shotAngle > Math.PI * 2) {
+                    shotAngle -= Math.PI * 2;
+                }
+            }
+            else {
+                sprite.angle = -shotAngle * 57.2958;
+                shotAngle -= SPIN_SPEED * Main.getDelta();
+                if(shotAngle < 0) {
+                    shotAngle += Math.PI * 2;
+                }
             }
         }
         super.update();

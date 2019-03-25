@@ -10,6 +10,7 @@ class GameScene extends Scene
 {
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 0.5;
+    public static inline var MAX_ENEMIES = 3;
 
     private var background:Entity;
     private var player:Player;
@@ -40,8 +41,10 @@ class GameScene extends Scene
     }
 
     private function sendWave() {
-        add(new Spinner(
-            Std.int(16 + Math.random() * (HXP.width - 32)), -16
-        ));
+        if(typeCount("enemy") < MAX_ENEMIES) {
+            add(new Spinner(
+                Std.int(16 + Math.random() * (HXP.width - 32)), -16
+            ));
+        }
     }
 }
