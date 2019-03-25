@@ -42,6 +42,13 @@ class Cactus extends Enemy {
             velocity.y = 0;
             if(velocity.x == 0) {
                 velocity.x = HXP.choose(SPEED, -SPEED);
+                if(centerX < HXP.width / 2) {
+                    velocity.x = SPEED;
+                }
+                else {
+                    velocity.x = -SPEED;
+                }
+                shoot();
                 shotCooldown.start();
             }
         }

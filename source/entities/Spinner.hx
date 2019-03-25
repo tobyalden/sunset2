@@ -47,6 +47,7 @@ class Spinner extends Enemy {
         }
         else {
             if(velocity.y != 0) {
+                shoot();
                 shotCooldown.start();
             }
             velocity.y = 0;
