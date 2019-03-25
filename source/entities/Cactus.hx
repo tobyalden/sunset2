@@ -49,9 +49,6 @@ class Cactus extends Enemy {
     }
 
     private function shoot() {
-        if(velocity.x == 0) {
-            return;
-        }
         scene.add(new EnemyBullet(
             Std.int(centerX),
             Std.int(centerY),

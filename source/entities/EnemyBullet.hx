@@ -12,13 +12,14 @@ class EnemyBullet extends Entity {
     private var sprite:Image;
 
     public function new(x:Int, y:Int, velocity:Vector2) {
-        mask = new Hitbox(4, 4, 3, 3);
-        super(x - width / 2, y - height / 2);
+        mask = new Hitbox(4, 4, -3, -3);
+        super(x, y);
         type = "enemybullet";
 
         this.velocity = velocity;
 
         sprite = new Image('graphics/enemybullet.png');
+        sprite.centerOrigin();
         graphic = sprite;
         layer = 1;
     }
