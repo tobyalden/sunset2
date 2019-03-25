@@ -6,7 +6,9 @@ import haxepunk.masks.*;
 import haxepunk.math.*;
 
 class PlayerBullet extends Entity {
-    public static inline var SPEED = 0.3;
+    public static inline var SPEED = 0.4;
+    public static inline var PLAYER_INFLUENCE = 0.3;
+    public static inline var SPRAY = 0.06;
 
     private var velocity:Vector2;
     private var sprite:Image;
@@ -17,9 +19,16 @@ class PlayerBullet extends Entity {
         super(player.x + player.width / 2 - width / 2, player.y);
         type = "playerbullet";
 
-        velocity = new Vector2(0, -SPEED);
+        velocity = new Vector2(
+            player.velocity.x * PLAYER_INFLUENCE
+            + (Math.random() - 0.5) * SPRAY,
+            -SPEED + player.velocity.y * PLAYER_INFLUENCE
+        );
 
         sprite = new Image('graphics/playerbullet.png');
+        sprite.centerOrigin();
+        sprite.x = 4;
+        sprite.y = 8;
         graphic = sprite;
         layer = 1;
 
@@ -47,6 +56,7 @@ class PlayerBullet extends Entity {
             cast(enemy, Enemy).takeHit();
             die();
         }
+        sprite.angle = MathUtil.angle(0, 0, velocity.x, velocity.y) + 90;
         super.update();
     }
 

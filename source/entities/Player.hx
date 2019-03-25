@@ -8,9 +8,9 @@ import haxepunk.tweens.misc.*;
 
 class Player extends Entity {
     public static inline var SPEED = 0.125;
-    public static inline var SHOT_COOLDOWN = 0.1;
+    public static inline var SHOT_COOLDOWN = 0.075;
 
-    private var velocity:Vector2;
+    public var velocity(default, null):Vector2;
     private var sprite:Spritemap;
     private var shotCooldown:Alarm;
     private var sfx:Map<String, Sfx>;

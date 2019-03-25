@@ -42,9 +42,16 @@ class GameScene extends Scene
 
     private function sendWave() {
         if(typeCount("enemy") < MAX_ENEMIES) {
-            add(new Cactus(
-                Std.int(16 + Math.random() * (HXP.width - 32)), -16
-            ));
+            var cactus = new Cactus(
+                Std.int(32 + Math.random() * (HXP.width - 64)), -32
+            );
+            var rock = new Rock(
+                Std.int(32 + Math.random() * (HXP.width - 64)), -32
+            );
+            var spinner = new Spinner(
+                Std.int(32 + Math.random() * (HXP.width - 64)), -32
+            );
+            add(HXP.choose(cactus, rock, spinner));
         }
     }
 }
