@@ -38,6 +38,15 @@ class Player extends Entity {
     override public function update() {
         movement();
         shooting();
+        if(
+            collide("enemybullet", x , y) != null
+            || collide("enemy", x , y) != null
+        ) {
+            sprite.color = 0xFF0000;
+        }
+        else {
+            sprite.color = 0xFFFFFF;
+        }
         super.update();
     }
 
