@@ -12,13 +12,14 @@ class Spinner extends Enemy {
     public static inline var MIN_DROP = 10;
     public static inline var MAX_DROP = 180;
     public static inline var SPIN_SPEED = 0.0007;
-    public static inline var SHOT_COOLDOWN = 0.2;
+    //public static inline var SHOT_COOLDOWN = 0.2;
+    public static inline var SHOT_COOLDOWN = 0.8;
     public static inline var SHOT_SPEED = 0.2;
     public static inline var SHOT_DECEL_RATE = 0.992;
     public static inline var ELITE_SPIN_SPEED = 0.0006;
     public static inline var ELITE_SHOT_COOLDOWN = 0.1;
     public static inline var ELITE_SHOT_SPEED = 0.14;
-    public static inline var ELITE_SHOT_DECEL_RATE = 0.997;
+    public static inline var ELITE_SHOT_DECEL_RATE = 0.998;
     public static inline var SPRAY = 0.2;
 
     private var sprite:Spritemap;
