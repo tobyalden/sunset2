@@ -12,31 +12,42 @@ class Spinner extends Enemy {
     public static inline var MIN_DROP = 10;
     public static inline var MAX_DROP = 180;
     public static inline var SPIN_SPEED = 0.0007;
-    //public static inline var SHOT_COOLDOWN = 0.2;
-    public static inline var SHOT_COOLDOWN = 0.8;
+    public static inline var SHOT_COOLDOWN = 0.2;
+    public static inline var ELITE_SHOT_COOLDOWN = 0.2;
+    public static inline var FIREWORK_SHOT_COOLDOWN = 0.8;
     public static inline var SHOT_SPEED = 0.2;
     public static inline var SHOT_DECEL_RATE = 0.992;
     public static inline var ELITE_SPIN_SPEED = 0.0006;
-    public static inline var ELITE_SHOT_COOLDOWN = 0.1;
     public static inline var ELITE_SHOT_SPEED = 0.14;
     public static inline var ELITE_SHOT_DECEL_RATE = 0.998;
     public static inline var SPRAY = 0.2;
+
+    public static inline var NO_VARIATION = 0;
+    public static inline var SPRAY_VARIATION = 1;
+    public static inline var FIREWORK_VARIATION = 2;
 
     private var sprite:Spritemap;
     private var dropDistance:Float;
     private var shotCooldown:Alarm;
     private var shotAngle:Float;
     private var clockwise:Bool;
-    private var isElite:Bool;
+    private var variation:Int;
 
-    public function new(x:Int, y:Int, isElite:Bool) {
+    public function new(x:Int, y:Int, variation:Int) {
         super(x, y);
-        this.isElite = isElite;
+        this.variation = variation;
         mask = new Circle(12);
-        sprite = new Spritemap(
-            'graphics/${isElite ? 'elitespinner.png' : 'spinner.png'}',
-            24, 24
-        );
+        var spriteName = 'spinner';
+        var cooldownTime = SHOT_COOLDOWN;
+        if(variation == SPRAY_VARIATION) {
+            spriteName = 'sprayspinner';
+            cooldownTime = ELITE_SHOT_COOLDOWN;
+        }
+        else if(variation == FIREWORK_VARIATION) {
+            spriteName = 'fireworkspinner';
+            cooldownTime = FIREWORK_SHOT_COOLDOWN;
+        }
+        sprite = new Spritemap('graphics/${spriteName}.png', 24, 24);
         sprite.add('idle', [0]);
         sprite.play('idle');
         sprite.centerOrigin();
@@ -45,10 +56,7 @@ class Spinner extends Enemy {
         graphic = sprite;
         health = 5;
         dropDistance = Math.random() * (MAX_DROP - MIN_DROP) + MIN_DROP;
-        shotCooldown = new Alarm(
-            isElite ? ELITE_SHOT_COOLDOWN : SHOT_COOLDOWN,
-            TweenType.Looping
-        );
+        shotCooldown = new Alarm(cooldownTime, TweenType.Looping);
         shotCooldown.onComplete.bind(function() {
             shoot();
         });
@@ -66,7 +74,9 @@ class Spinner extends Enemy {
                 shotCooldown.start();
             }
             velocity.y = 0;
-            var spinSpeed = isElite ? ELITE_SPIN_SPEED : SPIN_SPEED;
+            var spinSpeed = (
+                variation == SPRAY_VARIATION ? ELITE_SPIN_SPEED : SPIN_SPEED
+            );
             if(clockwise) {
                 sprite.angle = -shotAngle * 57.2958;
                 shotAngle += spinSpeed * Main.getDelta();
@@ -86,9 +96,11 @@ class Spinner extends Enemy {
     }
 
     private function shoot() {
-        var shotSpeed = isElite ? ELITE_SHOT_SPEED : SHOT_SPEED;
+        var shotSpeed = (
+            variation == SPRAY_VARIATION ? ELITE_SHOT_SPEED : SHOT_SPEED
+        );
         var shotVelocities:Array<Vector2>;
-        if(isElite) {
+        if(variation == SPRAY_VARIATION) {
             shotVelocities = [
                 new Vector2((Math.random() - 0.5) * SPRAY, shotSpeed),
                 new Vector2((Math.random() - 0.5) * SPRAY, shotSpeed),
@@ -114,12 +126,30 @@ class Spinner extends Enemy {
         }
         for(shotVelocity in shotVelocities) {
             shotVelocity.rotate(shotAngle);
-            scene.add(new FireworkBullet(
-                Std.int(centerX),
-                Std.int(centerY),
-                shotVelocity,
-                isElite? ELITE_SHOT_DECEL_RATE : SHOT_DECEL_RATE
-            ));
+            if(variation == FIREWORK_VARIATION) {
+                scene.add(new FireworkBullet(
+                    Std.int(centerX),
+                    Std.int(centerY),
+                    shotVelocity,
+                    (
+                        variation == SPRAY_VARIATION
+                        ? ELITE_SHOT_DECEL_RATE
+                        : SHOT_DECEL_RATE
+                    )
+                ));
+            }
+            else {
+                scene.add(new EnemyBullet(
+                    Std.int(centerX),
+                    Std.int(centerY),
+                    shotVelocity,
+                    (
+                        variation == SPRAY_VARIATION
+                        ? ELITE_SHOT_DECEL_RATE + 0.008 * Math.random()
+                        : SHOT_DECEL_RATE
+                    )
+                ));
+            }
         }
     }
 }
