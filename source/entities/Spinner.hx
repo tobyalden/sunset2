@@ -114,7 +114,7 @@ class Spinner extends Enemy {
         }
         for(shotVelocity in shotVelocities) {
             shotVelocity.rotate(shotAngle);
-            scene.add(new EnemyBullet(
+            scene.add(new FireworkBullet(
                 Std.int(centerX),
                 Std.int(centerY),
                 shotVelocity,
