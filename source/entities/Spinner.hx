@@ -97,7 +97,10 @@ class Spinner extends Enemy {
 
     private function shoot() {
         var shotSpeed = (
-            variation == SPRAY_VARIATION ? ELITE_SHOT_SPEED : SHOT_SPEED
+            (
+                variation == SPRAY_VARIATION
+                || variation == FIREWORK_VARIATION
+            ) ? ELITE_SHOT_SPEED : SHOT_SPEED
         );
         var shotVelocities:Array<Vector2>;
         if(variation == SPRAY_VARIATION) {
@@ -131,11 +134,7 @@ class Spinner extends Enemy {
                     Std.int(centerX),
                     Std.int(centerY),
                     shotVelocity,
-                    (
-                        variation == SPRAY_VARIATION
-                        ? ELITE_SHOT_DECEL_RATE
-                        : SHOT_DECEL_RATE
-                    )
+                    ELITE_SHOT_DECEL_RATE
                 ));
             }
             else {

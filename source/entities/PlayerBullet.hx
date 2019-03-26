@@ -8,7 +8,7 @@ import haxepunk.math.*;
 class PlayerBullet extends Entity {
     public static inline var SPEED = 0.4;
     public static inline var PLAYER_INFLUENCE = 0.3;
-    public static inline var SPRAY = 0.06;
+    public static inline var SPRAY = 0.2;
 
     private var velocity:Vector2;
     private var sprite:Image;
