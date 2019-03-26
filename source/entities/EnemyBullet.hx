@@ -10,10 +10,14 @@ class EnemyBullet extends Entity {
 
     private var velocity:Vector2;
     private var sprite:Image;
+    private var decel:Float;
 
-    public function new(x:Int, y:Int, velocity:Vector2) {
+    public function new(
+        x:Int, y:Int, velocity:Vector2, decel:Float = 1
+    ) {
         mask = new Hitbox(4, 4, -3, -3);
         super(x, y);
+        this.decel = decel;
         type = "enemybullet";
 
         this.velocity = velocity;
@@ -25,6 +29,7 @@ class EnemyBullet extends Entity {
     }
 
     override public function update() {
+        velocity.scale(decel);
         moveBy(
             velocity.x * Main.getDelta(),
             velocity.y * Main.getDelta()

@@ -14,7 +14,7 @@ class Main extends Engine
     private static var lastHorizontalAxis:Float;
 
     static function main() {
-        new Main();
+        new Main(360, 360, 60, true);
     }
 
     override public function init() {
