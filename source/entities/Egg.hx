@@ -12,7 +12,9 @@ class Egg extends Enemy {
     public static inline var DROP_TIME = 1;
     public static inline var HEALTH = 10;
     public static inline var TIME_BETWEEN_SHOTS = 0.5;
+    public static inline var BULLETS_PER_SHOT = 16;
     public static inline var SHOT_SPEED = 0.2;
+    public static inline var SHOT_SPREAD = 1; // Math.PI * 2 / SHOT_SPREAD
     public static inline var HEIGHT = 24;
 
     private var sprite:Image;
@@ -44,38 +46,6 @@ class Egg extends Enemy {
         addTween(shotTimer);
     }
 
-    private function shoot() {
-        for(i in 0...5) {
-            var spreadAngles = getSpreadAngles(5, Math.PI / 4);
-            var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
-            scene.add(new EnemyBullet(
-                centerX, centerY, SHOT_SPEED, shotAngle
-            ));
-        }
-    }
-
-    private function getSpreadAngles(numAngles:Int, maxSpread:Float) {
-        var spreadAngles = new Array<Float>();
-        var startAngle = -maxSpread / 2;
-        var angleIncrement = maxSpread / (numAngles - 1);
-        for(i in 0...numAngles) {
-            spreadAngles.push(startAngle + angleIncrement * i);
-        }
-        return spreadAngles;
-    }
-
-    public function getAngleTowardsPlayer() {
-        var player = scene.getInstance("player");
-        return (
-            Math.atan2(player.centerY - centerY, player.centerX - centerX)
-            - Math.PI / 2
-        );
-    }
-
-    public function degreesToRadians(degrees:Float) {
-        return Math.PI / 180 * degrees;
-    }
-
     override public function update() {
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
@@ -83,7 +53,15 @@ class Egg extends Enemy {
         super.update();
     }
 
-    private function isInPosition() {
-        return y == dropDistance;
+    private function shoot() {
+        for(i in 0...BULLETS_PER_SHOT) {
+            var spreadAngles = getSpreadAngles(
+                BULLETS_PER_SHOT, Math.PI * 2 / SHOT_SPREAD
+            );
+            var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
+            scene.add(new EnemyBullet(
+                centerX, centerY, SHOT_SPEED, shotAngle
+            ));
+        }
     }
 }

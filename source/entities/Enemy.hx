@@ -42,6 +42,24 @@ class Enemy extends Entity {
         super.update();
     }
 
+    public function getSpreadAngles(numAngles:Int, maxSpread:Float) {
+        var spreadAngles = new Array<Float>();
+        var startAngle = -maxSpread / 2;
+        var angleIncrement = maxSpread / (numAngles - 1);
+        for(i in 0...numAngles) {
+            spreadAngles.push(startAngle + angleIncrement * i);
+        }
+        return spreadAngles;
+    }
+
+    public function getAngleTowardsPlayer() {
+        var player = scene.getInstance("player");
+        return (
+            Math.atan2(player.centerY - centerY, player.centerX - centerX)
+            - Math.PI / 2
+        );
+    }
+
     public function takeHit() {
         health -= 1;
         flickerTimer.start();
