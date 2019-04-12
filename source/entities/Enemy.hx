@@ -10,24 +10,21 @@ import haxepunk.tweens.misc.*;
 class Enemy extends Entity {
     public static inline var FLICKER_DURATION = 0.2;
     public static inline var FLICKER_SPEED = 0.05;
+    public static inline var MIN_DROP_DISTANCE = 50;
+    public static inline var MAX_DROP_DISTANCE = 100;
 
-    private var velocity:Vector2;
     private var health:Int;
     private var flickerTimer:Alarm;
 
-    public function new(x:Int, y:Int) {
+    public function new(x:Float, y:Float, health:Int) {
         super(x, y);
+        this.health = health;
         type = "enemy";
-        velocity = new Vector2(0, 0);
         flickerTimer = new Alarm(FLICKER_DURATION, TweenType.Persist);
         addTween(flickerTimer);
     }
 
     override public function update() {
-        moveBy(
-            velocity.x * Main.getDelta(),
-            velocity.y * Main.getDelta()
-        );
         if(flickerTimer.active) {
             graphic.color = 0xFF0000;
             visible = Math.floor(

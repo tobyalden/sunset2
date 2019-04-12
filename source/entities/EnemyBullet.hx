@@ -6,30 +6,27 @@ import haxepunk.masks.*;
 import haxepunk.math.*;
 
 class EnemyBullet extends Entity {
-    public static inline var SPEED = 0.3;
-
-    private var velocity:Vector2;
+    private var speed:Float;
+    private var angle:Float;
     private var sprite:Image;
-    private var decel:Float;
 
-    public function new(
-        x:Int, y:Int, velocity:Vector2, decel:Float = 1
-    ) {
-        mask = new Hitbox(4, 4, -3, -3);
+    public function new(x:Float, y:Float, speed:Float, angle:Float) {
         super(x, y);
-        this.decel = decel;
+        this.speed = speed;
+        this.angle = angle;
         type = "enemybullet";
 
-        this.velocity = velocity;
+        mask = new Hitbox(4, 4, -3, -3);
 
-        sprite = new Image('graphics/enemybullet.png');
+        sprite = new Image("graphics/enemybullet.png");
         sprite.centerOrigin();
         graphic = sprite;
         layer = 1;
     }
 
     override public function update() {
-        velocity.scale(decel);
+        var velocity = new Vector2(0, speed);
+        velocity.rotate(angle);
         moveBy(
             velocity.x * Main.getDelta(),
             velocity.y * Main.getDelta()

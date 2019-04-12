@@ -2,6 +2,7 @@ package scenes;
 
 import haxepunk.*;
 import haxepunk.graphics.tile.*;
+import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 import entities.*;
@@ -10,8 +11,8 @@ class GameScene extends Scene
 {
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 1.5;
-    public static inline var ENEMIES_PER_WAVE = 3;
-    public static inline var MAX_ENEMIES = 3;
+    public static inline var ENEMIES_PER_WAVE = 5;
+    public static inline var MAX_ENEMIES = 5;
 
     private var background:Entity;
     private var player:Player;
@@ -33,34 +34,60 @@ class GameScene extends Scene
         addTween(waveTimer, true);
     }
 
+    private function sendWave() {
+        if(typeCount("enemy") < MAX_ENEMIES) {
+            for(i in 0...ENEMIES_PER_WAVE) {
+                add(new Egg(Random.random * (HXP.width - 24)));
+            }
+        }
+    }
+
     override public function update() {
         background.y -= SCROLL_SPEED * Main.getDelta();
         if(background.y > HXP.height) {
             background.y -= HXP.height;
         }
-        super.update();
-    }
 
-    private function sendWave() {
-        if(typeCount("enemy") < MAX_ENEMIES) {
-            for(i in 0...ENEMIES_PER_WAVE) {
-                var cactus = new Cactus(
-                    Std.int(32 + Math.random() * (HXP.width - 64)), -32
+        // The code below is copied from haxepunk/Scene.hx
+        // so we can use our time factor in e.updateTweens()
+
+		// update the camera
+		camera.update();
+
+		// update the entities
+		for (e in _update)
+		{
+			if (e.active)
+			{
+				if (e.hasTween) e.updateTweens(
+                    HXP.elapsed * Main.getTimeFactor()
                 );
-                var rock = new Rock(
-                    Std.int(32 + Math.random() * (HXP.width - 64)), -32
-                );
-                var spinner = new Spinner(
-                    Std.int(32 + Math.random() * (HXP.width - 64)),
-                    -32,
-                    HXP.choose(
-                        Spinner.NO_VARIATION,
-                        Spinner.SPRAY_VARIATION,
-                        Spinner.FIREWORK_VARIATION
-                    )
-                );
-                add(HXP.choose(cactus, rock, spinner));
-            }
-        }
+				if (e.active)
+				{
+					if (e.shouldUpdate())
+					{
+						e.preUpdate.invoke();
+						e.update();
+						e.postUpdate.invoke();
+					}
+				}
+			}
+			var g = e.graphic;
+			if (g != null && g.active)
+			{
+				g.preUpdate.invoke();
+				g.update();
+				g.postUpdate.invoke();
+			}
+		}
+
+		// update the camera again, in case it's following an entity
+		camera.update();
+
+		// updates the cursor
+		if (HXP.cursor != null && HXP.cursor.active)
+		{
+			HXP.cursor.update();
+		}
     }
 }

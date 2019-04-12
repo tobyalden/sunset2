@@ -7,6 +7,7 @@ import scenes.*;
 class Main extends Engine
 {
     public static inline var DEAD_ZONE = 0.5;
+    public static inline var SLOWMO = 0.5;
 
     public static var gamepad:Gamepad;
     private static var delta:Float;
@@ -14,7 +15,7 @@ class Main extends Engine
     private static var lastHorizontalAxis:Float;
 
     static function main() {
-        new Main(360, 360, 60, true);
+        new Main();
     }
 
     override public function init() {
@@ -167,7 +168,14 @@ class Main extends Engine
         return false;
     }
 
+    public static function getTimeFactor() {
+        if(!inputCheck("shoot")) {
+            return 0.4;
+        }
+        return 0.8;
+    }
+
     public static function getDelta() {
-        return delta;
+        return delta * getTimeFactor();
     }
 }
