@@ -7,7 +7,7 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 
 class Player extends Entity {
-    public static inline var SPEED = 0.125;
+    public static inline var SPEED = 0.175;
     public static inline var SHOT_COOLDOWN = 0.025;
 
     public var velocity(default, null):Vector2;

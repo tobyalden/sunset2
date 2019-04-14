@@ -9,17 +9,15 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 import scenes.*;
 
-class Egg extends Enemy {
+class Ringshot extends Enemy {
     public static inline var DROP_TIME = 1;
     public static inline var HEALTH = 100;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 0.5;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 1;
-    public static inline var MIN_BULLETS_PER_SHOT = 4;
-    public static inline var MAX_BULLETS_PER_SHOT = 12;
-    public static inline var CIRCULAR_SHOT_SPEED = 0.08;
-    public static inline var TARGETED_SHOT_SPEED = 0.15;
-    public static inline var SHOT_SPREAD = 30; // Math.PI * 2 / SHOT_SPREAD
-    public static inline var SHOT_ROTATION = 0.0005;
+    public static inline var MIN_BULLETS_PER_SHOT = 7;
+    public static inline var MAX_BULLETS_PER_SHOT = 25;
+    public static inline var MIN_SHOT_SPEED = 0.08;
+    public static inline var MAX_SHOT_SPEED = 0.12;
     public static inline var HEIGHT = 24;
 
     private var sprite:Image;
@@ -67,29 +65,22 @@ class Egg extends Enemy {
         var bulletsPerShot = MathUtil.ilerp(
             MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, GameScene.difficulty
         );
+        if(bulletsPerShot % 2 == 0) {
+            // Always shoot an odd # of bullets so one is aimed at the player
+            bulletsPerShot -= 1;
+        }
         for(i in 0...bulletsPerShot) {
             // Circular shot
             var spreadAngles = getSpreadAngles(bulletsPerShot, Math.PI * 2);
-            var shotAngle = spreadAngles[i];
-            scene.add(new EnemyBullet(
-                centerX, centerY, CIRCULAR_SHOT_SPEED, shotAngle,
-                SHOT_ROTATION, 0, EnemyBullet.BLUE_CIRCLE
-            ));
-            scene.add(new EnemyBullet(
-                centerX, centerY, CIRCULAR_SHOT_SPEED, shotAngle,
-                -SHOT_ROTATION, 0, EnemyBullet.BLUE_CIRCLE
-            ));
-
-            // Targeted shot
-            var sprayAngles = getSprayAngles(
-                bulletsPerShot, Math.PI * 2 / SHOT_SPREAD
+            var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
+            var shotSpeed = MathUtil.lerp(
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
             );
-            shotAngle = getAngleTowardsPlayer() + sprayAngles[i];
             scene.add(new EnemyBullet(
-                centerX, centerY, TARGETED_SHOT_SPEED, shotAngle, 0,
-                Random.random * 0.0001,
-                EnemyBullet.YELLOW_CIRCLE
+                centerX, centerY, shotSpeed, shotAngle,
+                0, 0.0001, EnemyBullet.BLUE_CIRCLE
             ));
         }
     }
 }
+

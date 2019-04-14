@@ -29,6 +29,7 @@ class PlayerBullet extends Entity {
         sprite.centerOrigin();
         sprite.x = 4;
         sprite.y = 8;
+        sprite.alpha = 0.5;
         graphic = sprite;
         layer = 1;
 

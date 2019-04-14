@@ -52,6 +52,14 @@ class Enemy extends Entity {
         return spreadAngles;
     }
 
+    public function getSprayAngles(numAngles:Int, maxSpread:Float) {
+        var sprayAngles = new Array<Float>();
+        for(i in 0...numAngles) {
+            sprayAngles.push(-maxSpread / 2 + Random.random * maxSpread);
+        }
+        return sprayAngles;
+    }
+
     public function getAngleTowardsPlayer() {
         var player = scene.getInstance("player");
         return (
