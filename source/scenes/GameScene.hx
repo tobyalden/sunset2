@@ -11,10 +11,10 @@ class GameScene extends Scene
 {
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 1;
-    public static inline var ENEMIES_PER_WAVE = 3;
+    public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 3;
 
-    public static var difficulty(default, null):Float = 0.4; // from 0 to 1
+    public static var difficulty(default, null):Float = 0; // from 0 to 1
 
     private var background:Entity;
     private var player:Player;
@@ -40,7 +40,7 @@ class GameScene extends Scene
     private function sendWave() {
         if(typeCount("enemy") < MAX_ENEMIES) {
             for(i in 0...ENEMIES_PER_WAVE) {
-                add(new Ringshot(24 + Math.random() * (HXP.width - 48)));
+                add(new Spiralshot(24 + Math.random() * (HXP.width - 48)));
             }
         }
     }

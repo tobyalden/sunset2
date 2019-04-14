@@ -60,7 +60,7 @@ class EnemyBullet extends Entity {
             // Remove offscreen bullets
             scene.remove(this);
         }
-        age += Main.getDelta() / 100;
+        age += Main.getDelta() / 1000;
         super.update();
     }
 }

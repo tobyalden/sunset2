@@ -15,6 +15,7 @@ class Enemy extends Entity {
 
     private var health:Int;
     private var flickerTimer:Alarm;
+    private var age:Float;
 
     public function new(x:Float, y:Float, health:Int) {
         super(x, y);
@@ -22,6 +23,7 @@ class Enemy extends Entity {
         type = "enemy";
         flickerTimer = new Alarm(FLICKER_DURATION, TweenType.Persist);
         addTween(flickerTimer);
+        age = 0;
     }
 
     override public function update() {
@@ -39,6 +41,7 @@ class Enemy extends Entity {
             // Remove offscreen enemies
             scene.remove(this);
         }
+        age += Main.getDelta() / 1000;
         super.update();
     }
 
