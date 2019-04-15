@@ -173,6 +173,15 @@ class Main extends Engine
             return 0.4;
         }
         return 0.8;
+        //if(
+            //inputCheck("left")
+            //|| inputCheck("right")
+            //|| inputCheck("down")
+            //|| inputCheck("up")
+        //) {
+            //return 0.8;
+        //}
+        //return 0;
     }
 
     public static function getDelta() {

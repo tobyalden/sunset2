@@ -14,7 +14,7 @@ class GameScene extends Scene
     public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 3;
 
-    public static var difficulty(default, null):Float = 0; // from 0 to 1
+    public static var difficulty(default, null):Float = 0.5; // from 0 to 1
 
     private var background:Entity;
     private var player:Player;
@@ -29,7 +29,7 @@ class GameScene extends Scene
             0, 0, new Backdrop('graphics/background.png')
         );
         background.layer = 10;
-        add(background);
+        //add(background);
         player = new Player(100, 100);
         add(player);
 

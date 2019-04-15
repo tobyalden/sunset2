@@ -10,7 +10,7 @@ import haxepunk.utils.*;
 import scenes.*;
 
 class Fanmaker extends Enemy {
-    public static inline var DROP_TIME = 0.1;
+    public static inline var DROP_TIME = 1;
     public static inline var HEALTH = 25;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 0.8;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 1.6;

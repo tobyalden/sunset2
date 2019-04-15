@@ -16,7 +16,7 @@ class PlayerBullet extends Entity {
 
     public function new(player:Player) {
         mask = new Hitbox(8, 16);
-        super(player.x + player.width / 2 - width / 2, player.y);
+        super(player.x + player.width / 2 + 6 - width / 2, player.y);
         type = "playerbullet";
 
         velocity = new Vector2(

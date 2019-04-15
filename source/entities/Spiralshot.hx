@@ -10,7 +10,7 @@ import haxepunk.utils.*;
 import scenes.*;
 
 class Spiralshot extends Enemy {
-    public static inline var DROP_TIME = 0.1;
+    public static inline var DROP_TIME = 1;
     public static inline var HEALTH = 25;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 0.13;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 0.25;
@@ -66,11 +66,9 @@ class Spiralshot extends Enemy {
         var spinRate = MathUtil.lerp(
             MIN_SPIN_RATE, MAX_SPIN_RATE, GameScene.difficulty
         );
-        trace('bulletsPerShot = ${bulletsPerShot}');
         for(i in 0...bulletsPerShot) {
             var spreadAngles = getSpreadAngles(bulletsPerShot + 1, Math.PI * 2);
             var shotAngle = age * spinRate + spreadAngles[i];
-            trace('shot ${i} angle: ${shotAngle % Math.PI * 2}');
             var shotSpeed = MathUtil.lerp(
                 MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
             );

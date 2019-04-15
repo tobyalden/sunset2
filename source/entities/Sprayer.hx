@@ -33,7 +33,7 @@ class Sprayer extends Enemy {
         sprite = new Image("graphics/sprayer.png");
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
-        dropTween = new Alarm(DROP_TIME * Math.random(), TweenType.OneShot);
+        dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();
             shotTimer.start();
