@@ -9,15 +9,17 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 import scenes.*;
 
-class Ringshot extends Enemy {
+class Sprayer extends Enemy {
     public static inline var DROP_TIME = 1;
     public static inline var HEALTH = 100;
-    public static inline var MIN_TIME_BETWEEN_SHOTS = 0.5;
-    public static inline var MAX_TIME_BETWEEN_SHOTS = 1.5;
-    public static inline var MIN_BULLETS_PER_SHOT = 7;
-    public static inline var MAX_BULLETS_PER_SHOT = 25;
-    public static inline var MIN_SHOT_SPEED = 0.08;
+    public static inline var MIN_TIME_BETWEEN_SHOTS = 0.85;
+    public static inline var MAX_TIME_BETWEEN_SHOTS = 1.6;
+    public static inline var MIN_BULLETS_PER_SHOT = 3;
+    public static inline var MAX_BULLETS_PER_SHOT = 6;
+    public static inline var MIN_SHOT_SPEED = 0.09;
     public static inline var MAX_SHOT_SPEED = 0.12;
+    public static inline var MIN_SHOT_SPREAD = 16;
+    public static inline var MAX_SHOT_SPREAD = 8; // Math.PI * 2 / SPREAD
     public static inline var HEIGHT = 24;
 
     private var sprite:Image;
@@ -35,7 +37,7 @@ class Ringshot extends Enemy {
             + Random.random
             * (Enemy.MAX_DROP_DISTANCE - Enemy.MIN_DROP_DISTANCE)
         );
-        dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
+        dropTween = new Alarm(DROP_TIME * Math.random(), TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();
             shotTimer.start();
@@ -65,22 +67,24 @@ class Ringshot extends Enemy {
         var bulletsPerShot = MathUtil.ilerp(
             MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, GameScene.difficulty
         );
-        if(bulletsPerShot % 2 == 0) {
-            // Always shoot an odd # of bullets so one is aimed at the player
-            bulletsPerShot -= 1;
-        }
+        var spread = MathUtil.ilerp(
+            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, GameScene.difficulty
+        );
         for(i in 0...bulletsPerShot) {
-            // Circular shot
-            var spreadAngles = getSpreadAngles(bulletsPerShot, Math.PI * 2);
-            var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
+            var sprayAngles = getSprayAngles(
+                bulletsPerShot, Math.PI * 2 / spread
+            );
+            var shotAngle = getAngleTowardsPlayer() + sprayAngles[i];
             var shotSpeed = MathUtil.lerp(
                 MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,
-                0, 0.0001, EnemyBullet.BLUE_CIRCLE
+                //0.0005 * (Math.random() - 0.5),
+                0,
+                0.0003 * Math.max(0.2, Math.random()),
+                EnemyBullet.BLUE_CIRCLE
             ));
         }
     }
 }
-

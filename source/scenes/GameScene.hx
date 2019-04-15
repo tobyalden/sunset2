@@ -39,10 +39,21 @@ class GameScene extends Scene
 
     private function sendWave() {
         if(typeCount("enemy") < MAX_ENEMIES) {
+            var enemyPositions = getEnemyPositions();
             for(i in 0...ENEMIES_PER_WAVE) {
-                add(new Fanmaker(24 + Math.random() * (HXP.width - 48)));
+                //add(new Fountain(24 + Math.random() * (HXP.width - 48)));
+                add(new Fountain(enemyPositions[i]));
             }
         }
+    }
+
+    private function getEnemyPositions() {
+        var enemyPositions = new Array<Int>();
+        for(i in 0...5) {
+            enemyPositions.push(i * 2 * 24 + 12);
+        }
+        HXP.shuffle(enemyPositions);
+        return enemyPositions;
     }
 
     override public function update() {
