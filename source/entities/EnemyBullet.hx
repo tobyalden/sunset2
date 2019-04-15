@@ -4,23 +4,27 @@ import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.masks.*;
 import haxepunk.math.*;
+import haxepunk.Tween;
+import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 
 class EnemyBullet extends Entity {
     public static inline var BLUE_CIRCLE = 0;
     public static inline var YELLOW_CIRCLE = 1;
 
-    private var speed:Float;
-    private var angle:Float;
+    public var speed(default, null):Float;
+    public var angle(default, null):Float;
     private var startAngle:Float;
     private var sprite:Image;
     private var age:Float;
     private var rotation:Float;
     private var accel:Float;
+    private var subroutineTimer:Alarm;
 
     public function new(
         x:Float, y:Float, speed:Float, angle:Float, rotation:Float,
-        accel:Float, bulletType:Int
+        accel:Float, bulletType:Int, ?subroutine:EnemyBullet->Void,
+        ?subroutineInterval:Float
     ) {
         super(x, y);
         this.speed = speed;
@@ -42,6 +46,15 @@ class EnemyBullet extends Entity {
         layer = -1;
 
         age = 0;
+
+        if(subroutine != null && subroutineInterval != null) {
+            subroutine(this);
+            subroutineTimer = new Alarm(subroutineInterval, TweenType.Looping);
+            subroutineTimer.onComplete.bind(function() {
+                subroutine(this);
+            });
+            addTween(subroutineTimer, true);
+        }
     }
 
     override public function update() {

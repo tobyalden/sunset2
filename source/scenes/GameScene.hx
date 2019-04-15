@@ -12,9 +12,9 @@ class GameScene extends Scene
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 1;
     public static inline var ENEMIES_PER_WAVE = 1;
-    public static inline var MAX_ENEMIES = 3;
+    public static inline var MAX_ENEMIES = 1;
 
-    public static var difficulty(default, null):Float = 0.5; // from 0 to 1
+    public static var difficulty(default, null):Float = 1; // from 0 to 1
 
     private var background:Entity;
     private var player:Player;
@@ -50,9 +50,11 @@ class GameScene extends Scene
                 var spiralshot = new Spiralshot(enemyXPositions[i]);
                 var sprayer = new Sprayer(enemyXPositions[i]);
                 var fountain = new Fountain(enemyXPositions[i]);
-                add(HXP.choose(
-                    fanmaker, ringshot, spiralshot, sprayer, fountain
-                ));
+                var treemaker = new Treemaker(HXP.width / 2 - 12);
+                add(treemaker);
+                //add(HXP.choose(
+                    //fanmaker, ringshot, spiralshot, sprayer, fountain
+                //));
             }
         }
     }
