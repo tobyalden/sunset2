@@ -50,8 +50,10 @@ class GameScene extends Scene
                 var spiralshot = new Spiralshot(enemyXPositions[i]);
                 var sprayer = new Sprayer(enemyXPositions[i]);
                 var fountain = new Fountain(enemyXPositions[i]);
-                var treemaker = new Treemaker(HXP.width / 2 - 12);
-                add(treemaker);
+                var treemaker = new Treemaker(enemyXPositions[i]);
+                //var litterer = new Litterer(enemyXPositions[i]);
+                var litterer = new Litterer(HXP.width / 2 - 14);
+                add(litterer);
                 //add(HXP.choose(
                     //fanmaker, ringshot, spiralshot, sprayer, fountain
                 //));
