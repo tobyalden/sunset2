@@ -11,7 +11,7 @@ import scenes.*;
 
 class Fountain extends Enemy {
     public static inline var DROP_TIME = 1;
-    public static inline var HEALTH = 100;
+    public static inline var HEALTH = 25;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 0.5;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 2;
     public static inline var MIN_SHOT_SPEED = 0.1;
@@ -25,15 +25,19 @@ class Fountain extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float, dropDistance:Float) {
-        super(x, -HEIGHT, dropDistance, HEALTH);
+    public function new(x:Float) {
+        super(x, -HEIGHT, HEALTH);
         mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/egg.png");
+        sprite = new Image("graphics/fountain.png");
         graphic = sprite;
+
+        dropDistance = GameScene.getEnemyYPosition();
+        dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();
             shotTimer.start();
         });
+        addTween(dropTween, true);
 
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,

@@ -11,7 +11,7 @@ import scenes.*;
 
 class Ringshot extends Enemy {
     public static inline var DROP_TIME = 1;
-    public static inline var HEALTH = 100;
+    public static inline var HEALTH = 25;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 0.5;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 1.5;
     public static inline var MIN_BULLETS_PER_SHOT = 7;
@@ -28,13 +28,9 @@ class Ringshot extends Enemy {
     public function new(x:Float) {
         super(x, -HEIGHT, HEALTH);
         mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/egg.png");
+        sprite = new Image("graphics/ringshot.png");
         graphic = sprite;
-        dropDistance = (
-            Enemy.MIN_DROP_DISTANCE
-            + Random.random
-            * (Enemy.MAX_DROP_DISTANCE - Enemy.MIN_DROP_DISTANCE)
-        );
+        dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

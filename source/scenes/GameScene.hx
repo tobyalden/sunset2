@@ -11,7 +11,7 @@ class GameScene extends Scene
 {
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 1;
-    public static inline var ENEMIES_PER_WAVE = 3;
+    public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 3;
 
     public static var difficulty(default, null):Float = 0; // from 0 to 1
@@ -19,6 +19,10 @@ class GameScene extends Scene
     private var background:Entity;
     private var player:Player;
     private var waveTimer:Alarm;
+
+    static public function getEnemyYPosition() {
+        return HXP.choose(20, 40, 80, 100, 120, 140, 160);
+    }
 
     override public function begin() {
         background = new Entity(
@@ -39,15 +43,21 @@ class GameScene extends Scene
 
     private function sendWave() {
         if(typeCount("enemy") < MAX_ENEMIES) {
-            var enemyPositions = getEnemyPositions();
+            var enemyXPositions = getEnemyXPositions();
             for(i in 0...ENEMIES_PER_WAVE) {
-                //add(new Fountain(24 + Math.random() * (HXP.width - 48)));
-                add(new Fountain(enemyPositions[i]));
+                var fanmaker = new Fanmaker(enemyXPositions[i]);
+                var ringshot = new Ringshot(enemyXPositions[i]);
+                var spiralshot = new Spiralshot(enemyXPositions[i]);
+                var sprayer = new Sprayer(enemyXPositions[i]);
+                var fountain = new Fountain(enemyXPositions[i]);
+                add(HXP.choose(
+                    fanmaker, ringshot, spiralshot, sprayer, fountain
+                ));
             }
         }
     }
 
-    private function getEnemyPositions() {
+    private function getEnemyXPositions() {
         var enemyPositions = new Array<Int>();
         for(i in 0...5) {
             enemyPositions.push(i * 2 * 24 + 12);
