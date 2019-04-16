@@ -12,7 +12,7 @@ class GameScene extends Scene
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 1;
     public static inline var ENEMIES_PER_WAVE = 1;
-    public static inline var MAX_ENEMIES = 0;
+    public static inline var MAX_ENEMIES = 1;
 
     public static var difficulty(default, null):Float = 1; // from 0 to 1
 
@@ -39,8 +39,6 @@ class GameScene extends Scene
         });
         addTween(waveTimer, true);
         sendWave();
-                var fireworker = new Fireworker(HXP.width / 2 - 14);
-                add(fireworker);
     }
 
     private function sendWave() {
@@ -52,7 +50,7 @@ class GameScene extends Scene
                 var spiralshot = new Spiralshot(enemyXPositions[i]);
                 var sprayer = new Sprayer(enemyXPositions[i]);
                 var fountain = new Fountain(enemyXPositions[i]);
-                var treemaker = new Treemaker(enemyXPositions[i]);
+                var treemaker = new Treemaker(HXP.width / 2 - 14);
                 var litterer = new Litterer(enemyXPositions[i]);
                 var scatterer = new Scatterer(enemyXPositions[i]);
                 var fireworker = new Fireworker(HXP.width / 2 - 14);

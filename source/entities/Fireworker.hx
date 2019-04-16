@@ -18,8 +18,6 @@ class Fireworker extends Enemy {
     public static inline var MAX_SHOT_SPEED = 0.24;
     public static inline var SHOT_ACCEL = -0.00016;
     public static inline var HEIGHT = 24;
-    public static inline var MIN_SUBROUTINE_INTERVAL = 0.7;
-    public static inline var MAX_SUBROUTINE_INTERVAL = 1;
     public static inline var MIN_BULLETS_PER_SUBROUTINE_SHOT = 8;
     public static inline var MAX_BULLETS_PER_SUBROUTINE_SHOT = 16;
     public static inline var SUBROUTINE_SHOT_SPEED = 0.1;
@@ -68,23 +66,27 @@ class Fireworker extends Enemy {
         var shotSpeed = MathUtil.lerp(
             MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
         );
-        var subroutineInterval = MathUtil.lerp(
-            MAX_SUBROUTINE_INTERVAL, MIN_SUBROUTINE_INTERVAL,
-            GameScene.difficulty
-        );
-        subroutineInterval = 0.01;
         scene.add(new EnemyBullet(
             centerX, centerY, shotSpeed, shotAngle, 0,
             SHOT_ACCEL + Math.random() * SHOT_ACCEL,
-            EnemyBullet.BLUE_CIRCLE, shotSubroutine, subroutineInterval
+            EnemyBullet.BLUE_CIRCLE, shotSubroutine,
+            EnemyBullet.CONSTANT_INTERVAL
         ));
     }
 
     private function shotSubroutine(parent:EnemyBullet) {
-        parent.setSpriteScale(MathUtil.lerp(
-            2, 1,
-            Ease.expoIn(Math.min(parent.speed, 0.05) * (1 / 0.05))
-        ));
+        if(parent.speed < 0.02) {
+            parent.setSpriteScale(MathUtil.lerp(
+                0.1, 2,
+                Ease.quadIn(Math.min(parent.speed, 0.02) * (1 / 0.02))
+            ));
+        }
+        else if(parent.speed < 0.05) {
+            parent.setSpriteScale(MathUtil.lerp(
+                2, 1,
+                Ease.quadIn(Math.min(parent.speed, 0.05) * (1 / 0.05))
+            ));
+        }
         if(parent.speed > 0) {
             return;
         }

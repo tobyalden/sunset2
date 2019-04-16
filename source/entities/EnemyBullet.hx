@@ -11,6 +11,7 @@ import haxepunk.utils.*;
 class EnemyBullet extends Entity {
     public static inline var BLUE_CIRCLE = 0;
     public static inline var YELLOW_CIRCLE = 1;
+    public static inline var CONSTANT_INTERVAL = 0.0166666667;
 
     public var speed(default, null):Float;
     public var angle(default, null):Float;
@@ -78,6 +79,18 @@ class EnemyBullet extends Entity {
             scene.remove(this);
         }
         age += Main.getDelta() / 1000;
+        if(
+            subroutineTimer != null &&
+            subroutineTimer.duration != EnemyBullet.CONSTANT_INTERVAL
+        ) {
+            setSpriteScale(MathUtil.lerp(
+                1, 1.4, Ease.sineInOut(subroutineTimer.percent - 0.5)
+            ));
+        }
         super.update();
+    }
+
+    public function getSubroutineTimerPercent() {
+        return subroutineTimer.percent;
     }
 }
