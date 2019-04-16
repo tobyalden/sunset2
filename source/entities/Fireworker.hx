@@ -11,7 +11,7 @@ import scenes.*;
 
 class Fireworker extends Enemy {
     public static inline var DROP_TIME = 1;
-    public static inline var HEALTH = 1;
+    public static inline var HEALTH = 25;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 1.5;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 2;
     public static inline var MIN_SHOT_SPEED = 0.15;
@@ -24,6 +24,7 @@ class Fireworker extends Enemy {
     public static inline var MAX_BULLETS_PER_SUBROUTINE_SHOT = 16;
     public static inline var SUBROUTINE_SHOT_SPEED = 0.1;
     public static inline var SUBROUTINE_SHOT_ACCEL = 0.000035;
+    public static inline var SUBROUTINE_Sb = 0.000035;
 
     private var sprite:Image;
     private var dropDistance:Float;
@@ -80,6 +81,10 @@ class Fireworker extends Enemy {
     }
 
     private function shotSubroutine(parent:EnemyBullet) {
+        parent.setSpriteScale(MathUtil.lerp(
+            2, 1,
+            Ease.expoIn(Math.min(parent.speed, 0.05) * (1 / 0.05))
+        ));
         if(parent.speed > 0) {
             return;
         }

@@ -12,7 +12,7 @@ class GameScene extends Scene
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 1;
     public static inline var ENEMIES_PER_WAVE = 1;
-    public static inline var MAX_ENEMIES = 1;
+    public static inline var MAX_ENEMIES = 0;
 
     public static var difficulty(default, null):Float = 1; // from 0 to 1
 
@@ -21,7 +21,7 @@ class GameScene extends Scene
     private var waveTimer:Alarm;
 
     static public function getEnemyYPosition() {
-        return HXP.choose(20, 40, 80, 100, 120, 140, 160);
+        return HXP.choose(20, 40, 80, 100, 120, 140);
     }
 
     override public function begin() {
@@ -39,6 +39,8 @@ class GameScene extends Scene
         });
         addTween(waveTimer, true);
         sendWave();
+                var fireworker = new Fireworker(HXP.width / 2 - 14);
+                add(fireworker);
     }
 
     private function sendWave() {
@@ -51,11 +53,13 @@ class GameScene extends Scene
                 var sprayer = new Sprayer(enemyXPositions[i]);
                 var fountain = new Fountain(enemyXPositions[i]);
                 var treemaker = new Treemaker(enemyXPositions[i]);
-                //var litterer = new Litterer(enemyXPositions[i]);
-                var litterer = new Litterer(HXP.width / 2 - 14);
-                add(litterer);
+                var litterer = new Litterer(enemyXPositions[i]);
+                var scatterer = new Scatterer(enemyXPositions[i]);
+                var fireworker = new Fireworker(HXP.width / 2 - 14);
+                add(fireworker);
                 //add(HXP.choose(
-                    //fanmaker, ringshot, spiralshot, sprayer, fountain
+                    //fanmaker, ringshot, spiralshot, sprayer, fountain,
+                    //treemaker, litterer, scatterer, fireworker
                 //));
             }
         }

@@ -14,12 +14,17 @@ class EnemyBullet extends Entity {
 
     public var speed(default, null):Float;
     public var angle(default, null):Float;
+    public var subroutineTimer(default, null):Alarm;
     private var startAngle:Float;
     private var sprite:Image;
     private var age:Float;
     private var rotation:Float;
     private var accel:Float;
-    private var subroutineTimer:Alarm;
+
+    public function setSpriteScale(newScale:Float) {
+        sprite.scale = newScale;
+        sprite.centerOrigin();
+    }
 
     public function new(
         x:Float, y:Float, speed:Float, angle:Float, rotation:Float,
