@@ -48,7 +48,6 @@ class EnemyBullet extends Entity {
         age = 0;
 
         if(subroutine != null && subroutineInterval != null) {
-            subroutine(this);
             subroutineTimer = new Alarm(subroutineInterval, TweenType.Looping);
             subroutineTimer.onComplete.bind(function() {
                 subroutine(this);

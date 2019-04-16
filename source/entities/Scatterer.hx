@@ -9,19 +9,19 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 import scenes.*;
 
-class Treemaker extends Enemy {
+class Scatterer extends Enemy {
     public static inline var DROP_TIME = 1;
     public static inline var HEALTH = 25;
-    public static inline var MIN_TIME_BETWEEN_SHOTS = 2;
-    public static inline var MAX_TIME_BETWEEN_SHOTS = 3.5;
-    public static inline var SHOT_SPEED = 0.1;
-    public static inline var SHOT_ACCEL = 0.000075;
+    public static inline var MIN_TIME_BETWEEN_SHOTS = 2.8;
+    public static inline var MAX_TIME_BETWEEN_SHOTS = 3.9;
+    public static inline var MIN_SHOT_SPEED = 0.15;
+    public static inline var MAX_SHOT_SPEED = 0.18;
+    public static inline var SHOT_ACCEL = 0.00001;
+    public static inline var SHOT_ROTATION = 0.00065;
     public static inline var HEIGHT = 24;
     public static inline var MIN_SUBROUTINE_INTERVAL = 0.2;
     public static inline var MAX_SUBROUTINE_INTERVAL = 0.8;
-    public static inline var MIN_SUBROUTINE_SHOT_SPEED = 0.06;
-    public static inline var MAX_SUBROUTINE_SHOT_SPEED = 0.08;
-    public static inline var SUBROUTINE_SHOT_ACCEL = 0.000035;
+    public static inline var SUBROUTINE_SHOT_ACCEL = 0.000084;
 
     private var sprite:Image;
     private var dropDistance:Float;
@@ -31,7 +31,7 @@ class Treemaker extends Enemy {
     public function new(x:Float) {
         super(x, -HEIGHT, HEALTH);
         mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/treemaker.png");
+        sprite = new Image("graphics/scatterer.png");
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -62,12 +62,21 @@ class Treemaker extends Enemy {
 
     private function shoot() {
         var shotAngle = getAngleTowardsPlayer();
+        var shotSpeed = MathUtil.lerp(
+            MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+        );
         var subroutineInterval = MathUtil.lerp(
             MAX_SUBROUTINE_INTERVAL, MIN_SUBROUTINE_INTERVAL,
             GameScene.difficulty
         );
         scene.add(new EnemyBullet(
-            centerX, centerY, SHOT_SPEED, shotAngle, 0, SHOT_ACCEL,
+            centerX, centerY, shotSpeed, shotAngle,
+            SHOT_ROTATION, SHOT_ACCEL,
+            EnemyBullet.BLUE_CIRCLE, shotSubroutine, subroutineInterval
+        ));
+        scene.add(new EnemyBullet(
+            centerX, centerY, shotSpeed, shotAngle,
+            -SHOT_ROTATION, SHOT_ACCEL,
             EnemyBullet.BLUE_CIRCLE, shotSubroutine, subroutineInterval
         ));
     }
@@ -76,20 +85,13 @@ class Treemaker extends Enemy {
         if(HXP.scene == null) {
             return;
         }
-        var subroutineShotSpeed = MathUtil.lerp(
-            MIN_SUBROUTINE_SHOT_SPEED, MAX_SUBROUTINE_SHOT_SPEED,
-            GameScene.difficulty
-        );
         HXP.scene.add(new EnemyBullet(
-            parent.centerX, parent.centerY, subroutineShotSpeed,
-            parent.angle + Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
-            EnemyBullet.YELLOW_CIRCLE
-        ));
-        HXP.scene.add(new EnemyBullet(
-            parent.centerX, parent.centerY, subroutineShotSpeed,
-            parent.angle - Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
+            parent.centerX, parent.centerY, 0,
+            Math.random() * Math.PI - Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
             EnemyBullet.YELLOW_CIRCLE
         ));
     }
 }
+
+
 
