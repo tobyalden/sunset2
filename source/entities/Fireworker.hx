@@ -80,7 +80,7 @@ class Fireworker extends Enemy {
     }
 
     private function shotSubroutine(parent:EnemyBullet) {
-        if(HXP.scene == null || parent.speed > 0) {
+        if(parent.speed > 0) {
             return;
         }
         var bulletsPerShot = MathUtil.ilerp(

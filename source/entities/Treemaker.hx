@@ -73,9 +73,6 @@ class Treemaker extends Enemy {
     }
 
     private function shotSubroutine(parent:EnemyBullet) {
-        if(HXP.scene == null) {
-            return;
-        }
         var subroutineShotSpeed = MathUtil.lerp(
             MIN_SUBROUTINE_SHOT_SPEED, MAX_SUBROUTINE_SHOT_SPEED,
             GameScene.difficulty

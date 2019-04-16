@@ -82,9 +82,6 @@ class Scatterer extends Enemy {
     }
 
     private function shotSubroutine(parent:EnemyBullet) {
-        if(HXP.scene == null) {
-            return;
-        }
         HXP.scene.add(new EnemyBullet(
             parent.centerX, parent.centerY, 0,
             Math.random() * Math.PI - Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
