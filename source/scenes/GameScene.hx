@@ -10,11 +10,11 @@ import entities.*;
 class GameScene extends Scene
 {
     public static inline var SCROLL_SPEED = 0.1;
-    public static inline var TIME_BETWEEN_WAVES = 1;
+    public static inline var TIME_BETWEEN_WAVES = 2;
     public static inline var ENEMIES_PER_WAVE = 1;
-    public static inline var MAX_ENEMIES = 1;
+    public static inline var MAX_ENEMIES = 3;
 
-    public static var difficulty(default, null):Float = 1; // from 0 to 1
+    public static var difficulty(default, null):Float = 0.85; // from 0 to 1
 
     private var background:Entity;
     private var player:Player;
@@ -22,6 +22,7 @@ class GameScene extends Scene
 
     static public function getEnemyYPosition() {
         return HXP.choose(20, 40, 80, 100, 120, 140);
+        //return 400;
     }
 
     override public function begin() {
@@ -54,11 +55,11 @@ class GameScene extends Scene
                 var litterer = new Litterer(enemyXPositions[i]);
                 var scatterer = new Scatterer(enemyXPositions[i]);
                 var fireworker = new Fireworker(HXP.width / 2 - 14);
-                add(fireworker);
-                //add(HXP.choose(
-                    //fanmaker, ringshot, spiralshot, sprayer, fountain,
-                    //treemaker, litterer, scatterer, fireworker
-                //));
+                //add(fireworker);
+                add(HXP.choose(
+                    fanmaker, ringshot, spiralshot, sprayer, fountain,
+                    treemaker, litterer, scatterer, fireworker
+                ));
             }
         }
     }

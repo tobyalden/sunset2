@@ -77,7 +77,7 @@ class Fireworker extends Enemy {
     private function shotSubroutine(parent:EnemyBullet) {
         if(parent.speed < 0.02) {
             parent.setSpriteScale(MathUtil.lerp(
-                0.1, 2,
+                0.5, 2,
                 Ease.quadIn(Math.min(parent.speed, 0.02) * (1 / 0.02))
             ));
         }

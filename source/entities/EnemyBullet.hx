@@ -24,7 +24,8 @@ class EnemyBullet extends Entity {
 
     public function setSpriteScale(newScale:Float) {
         sprite.scale = newScale;
-        sprite.centerOrigin();
+        sprite.x = -(2 + 3) * (newScale - 1);
+        sprite.y = -(2 + 3) * (newScale - 1);
     }
 
     public function new(
@@ -32,14 +33,14 @@ class EnemyBullet extends Entity {
         accel:Float, bulletType:Int, ?subroutine:EnemyBullet->Void,
         ?subroutineInterval:Float
     ) {
-        super(x, y);
+        super(x - (2 + 3), y - (2 + 3));
         this.speed = speed;
         this.angle = angle;
         this.startAngle = angle;
         this.rotation = rotation;
         this.accel = accel;
         type = "enemybullet";
-        mask = new Hitbox(4, 4, -3, -3);
+        mask = new Hitbox(4, 4, 3, 3);
 
         if(bulletType == BLUE_CIRCLE) {
             sprite = new Image("graphics/enemybullet.png");
@@ -47,7 +48,6 @@ class EnemyBullet extends Entity {
         else {
             sprite = new Image("graphics/enemybullet2.png");
         }
-        sprite.centerOrigin();
         graphic = sprite;
         layer = -1;
 
@@ -64,6 +64,9 @@ class EnemyBullet extends Entity {
 
     override public function update() {
         speed += accel * Main.getDelta();
+        if(speed < 0) {
+            speed = 0;
+        }
         var velocity = new Vector2(0, speed);
         angle += rotation * Main.getDelta();
         velocity.rotate(angle);

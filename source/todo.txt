@@ -1,0 +1,13 @@
+- makes sure bullets are centered
+- add separate levels
+- add backgrounds
+- add one more enemy
+- add bosses
+- add main menu
+- add sfx
+- add music
+- add ending
+- add scoring
+- add items that drop out of enemies on death
+- add lives
+- add game over
