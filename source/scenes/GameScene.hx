@@ -14,12 +14,9 @@ class GameScene extends Scene
     public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 1;
 
-    public static var level:Array<Dynamic> = [
-        // Enemy count trigger, difficulty, enemy list
-        2, 0.4, "fanmaker,ringshot",
-        0, 0.4, "fireworker,fountain",
-        2, 0.4, "litterer,fountain"
-    ];
+
+    public var waves:Array<Array<Dynamic>>;
+    public var waveCount:Int;
 
     private var background:Entity;
     private var player:Player;
@@ -39,6 +36,16 @@ class GameScene extends Scene
         player = new Player(100, HXP.height - 100);
         add(player);
 
+        waves = [
+            // Enemy count trigger, difficulty, enemy list
+            [2, 0.4, "fanmaker,ringshot"],
+            [1, 0.2, "fireworker,fountain"],
+            [0, 1, "spiralshot"],
+            [2, 0.4, "litterer,fountain"],
+            [0, 0, "boss"]
+        ];
+        waveCount = 0;
+
         waveTimer = new Alarm(TIME_BETWEEN_WAVES, TweenType.Looping);
         waveTimer.onComplete.bind(function() {
             sendWave();
@@ -48,26 +55,57 @@ class GameScene extends Scene
     }
 
     private function sendWave() {
-        if(typeCount("enemy") < MAX_ENEMIES) {
-            var enemyXPositions = getEnemyXPositions();
-            for(i in 0...ENEMIES_PER_WAVE) {
-                var fanmaker = new Fanmaker(enemyXPositions[i], 1);
-                var ringshot = new Ringshot(enemyXPositions[i], 1);
-                var spiralshot = new Spiralshot(enemyXPositions[i], 1);
-                var sprayer = new Sprayer(enemyXPositions[i], 1);
-                var fountain = new Fountain(enemyXPositions[i], 1);
-                var treemaker = new Treemaker(HXP.width / 2 - 14, 1);
-                var litterer = new Litterer(enemyXPositions[i], 1);
-                var scatterer = new Scatterer(enemyXPositions[i], 1);
-                var fireworker = new Fireworker(HXP.width / 2 - 14, 1);
-                var boss = new Boss(HXP.width / 2 - 96, 1);
-                add(boss);
-                //add(HXP.choose(
-                    //fanmaker, ringshot, spiralshot, sprayer, fountain,
-                    //treemaker, litterer, scatterer, fireworker
-                //));
-            }
+        trace('what is waves? ${Type.getClass(waves)}');
+        var wave = waves[waveCount];
+        if(wave == null) {
+            return;
         }
+        var enemyCountTrigger:Int = cast(wave[0], Int);
+        var waveDifficulty:Float = cast(wave[1], Float);
+        var enemyList:Array<String> = cast(wave[2], String).split(",");
+        if(typeCount("enemy") > enemyCountTrigger) {
+            return;
+        }
+        var enemyXPositions = getEnemyXPositions();
+        var count = 0;
+        for(enemy in enemyList) {
+            if(enemy == "boss") {
+                var bossDelay = new Alarm(3, TweenType.OneShot);
+                bossDelay.onComplete.bind(function() {
+                    add(new Boss(HXP.width / 2 - 192 / 2, 0));
+                });
+                addTween(bossDelay, true);
+            }
+            else if(enemy == "fanmaker") {
+                add(new Fanmaker(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "fireworker") {
+                add(new Fireworker(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "fountain") {
+                add(new Fountain(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "litterer") {
+                add(new Litterer(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "ringshot") {
+                add(new Ringshot(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "scatterer") {
+                add(new Scatterer(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "spiralshot") {
+                add(new Spiralshot(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "sprayer") {
+                add(new Sprayer(enemyXPositions[count], waveDifficulty));
+            }
+            else if(enemy == "treemaker") {
+                add(new Treemaker(enemyXPositions[count], waveDifficulty));
+            }
+            count++;
+        }
+        waveCount++;
     }
 
     private function getEnemyXPositions() {

@@ -39,7 +39,7 @@ class Boss extends Enemy {
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
+        mask = new Hitbox(192, HEIGHT);
         sprite = new Image("graphics/boss.png");
         graphic = sprite;
         dropDistance = 24;
@@ -74,17 +74,19 @@ class Boss extends Enemy {
         });
         addTween(fastShotTimer);
 
-        ports = [
-            //RING_PORT, RING_PORT, RING_PORT, RING_PORT, RING_PORT, RING_PORT
-            //SPIRAL_PORT, SPIRAL_PORT, SPIRAL_PORT, SPIRAL_PORT, SPIRAL_PORT, SPIRAL_PORT
-            //SPRAY_PORT, SPRAY_PORT, SPRAY_PORT, SPRAY_PORT, SPRAY_PORT, SPRAY_PORT
-            HXP.choose(RING_PORT, SPRAY_PORT, SPRAY_PORT, EMPTY_PORT),
-            HXP.choose(RING_PORT, SPRAY_PORT, SPRAY_PORT, EMPTY_PORT),
-            HXP.choose(RING_PORT, SPRAY_PORT, SPRAY_PORT, EMPTY_PORT),
-            HXP.choose(RING_PORT, SPRAY_PORT, SPRAY_PORT, EMPTY_PORT),
-            HXP.choose(RING_PORT, SPRAY_PORT, SPRAY_PORT, EMPTY_PORT),
-            HXP.choose(RING_PORT, SPRAY_PORT, SPRAY_PORT, EMPTY_PORT)
-        ];
+        if(difficulty == 0) {
+            ports = [
+                RING_PORT, EMPTY_PORT, RING_PORT,
+                EMPTY_PORT, SPRAY_PORT, EMPTY_PORT
+            ];
+        }
+        else {
+            ports = [
+                EMPTY_PORT, EMPTY_PORT, EMPTY_PORT,
+                EMPTY_PORT, EMPTY_PORT, EMPTY_PORT
+            ];
+        }
+
         var portCount = 0;
         for(port in ports) {
             var portGraphic:Image;
