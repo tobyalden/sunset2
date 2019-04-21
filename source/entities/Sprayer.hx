@@ -27,8 +27,8 @@ class Sprayer extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/sprayer.png");
         graphic = sprite;
@@ -43,7 +43,7 @@ class Sprayer extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -61,10 +61,10 @@ class Sprayer extends Enemy {
 
     private function shoot() {
         var bulletsPerShot = MathUtil.ilerp(
-            MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, GameScene.difficulty
+            MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, difficulty
         );
         var spread = MathUtil.ilerp(
-            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, GameScene.difficulty
+            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, difficulty
         );
         for(i in 0...bulletsPerShot) {
             var sprayAngles = getSprayAngles(
@@ -72,7 +72,7 @@ class Sprayer extends Enemy {
             );
             var shotAngle = getAngleTowardsPlayer() + sprayAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,

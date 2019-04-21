@@ -25,8 +25,8 @@ class Ringshot extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/ringshot.png");
         graphic = sprite;
@@ -41,7 +41,7 @@ class Ringshot extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -59,7 +59,7 @@ class Ringshot extends Enemy {
 
     private function shoot() {
         var bulletsPerShot = MathUtil.ilerp(
-            MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, GameScene.difficulty
+            MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, difficulty
         );
         if(bulletsPerShot % 2 == 0) {
             // Always shoot an odd # of bullets so one is aimed at the player
@@ -70,7 +70,7 @@ class Ringshot extends Enemy {
             var spreadAngles = getSpreadAngles(bulletsPerShot, Math.PI * 2);
             var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,

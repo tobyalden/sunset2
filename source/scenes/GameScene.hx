@@ -12,9 +12,14 @@ class GameScene extends Scene
     public static inline var SCROLL_SPEED = 0.1;
     public static inline var TIME_BETWEEN_WAVES = 2;
     public static inline var ENEMIES_PER_WAVE = 1;
-    public static inline var MAX_ENEMIES = 3;
+    public static inline var MAX_ENEMIES = 1;
 
-    public static var difficulty(default, null):Float = 0.85; // from 0 to 1
+    public static var level:Array<Dynamic> = [
+        // Enemy count trigger, difficulty, enemy list
+        2, 0.4, "fanmaker,ringshot",
+        0, 0.4, "fireworker,fountain",
+        2, 0.4, "litterer,fountain"
+    ];
 
     private var background:Entity;
     private var player:Player;
@@ -31,7 +36,7 @@ class GameScene extends Scene
         );
         background.layer = 10;
         //add(background);
-        player = new Player(100, 100);
+        player = new Player(100, HXP.height - 100);
         add(player);
 
         waveTimer = new Alarm(TIME_BETWEEN_WAVES, TweenType.Looping);
@@ -46,20 +51,21 @@ class GameScene extends Scene
         if(typeCount("enemy") < MAX_ENEMIES) {
             var enemyXPositions = getEnemyXPositions();
             for(i in 0...ENEMIES_PER_WAVE) {
-                var fanmaker = new Fanmaker(enemyXPositions[i]);
-                var ringshot = new Ringshot(enemyXPositions[i]);
-                var spiralshot = new Spiralshot(enemyXPositions[i]);
-                var sprayer = new Sprayer(enemyXPositions[i]);
-                var fountain = new Fountain(enemyXPositions[i]);
-                var treemaker = new Treemaker(HXP.width / 2 - 14);
-                var litterer = new Litterer(enemyXPositions[i]);
-                var scatterer = new Scatterer(enemyXPositions[i]);
-                var fireworker = new Fireworker(HXP.width / 2 - 14);
-                //add(fireworker);
-                add(HXP.choose(
-                    fanmaker, ringshot, spiralshot, sprayer, fountain,
-                    treemaker, litterer, scatterer, fireworker
-                ));
+                var fanmaker = new Fanmaker(enemyXPositions[i], 1);
+                var ringshot = new Ringshot(enemyXPositions[i], 1);
+                var spiralshot = new Spiralshot(enemyXPositions[i], 1);
+                var sprayer = new Sprayer(enemyXPositions[i], 1);
+                var fountain = new Fountain(enemyXPositions[i], 1);
+                var treemaker = new Treemaker(HXP.width / 2 - 14, 1);
+                var litterer = new Litterer(enemyXPositions[i], 1);
+                var scatterer = new Scatterer(enemyXPositions[i], 1);
+                var fireworker = new Fireworker(HXP.width / 2 - 14, 1);
+                var boss = new Boss(HXP.width / 2 - 96, 1);
+                add(boss);
+                //add(HXP.choose(
+                    //fanmaker, ringshot, spiralshot, sprayer, fountain,
+                    //treemaker, litterer, scatterer, fireworker
+                //));
             }
         }
     }

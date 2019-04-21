@@ -27,8 +27,8 @@ class Litterer extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/litterer.png");
         graphic = sprite;
@@ -43,7 +43,7 @@ class Litterer extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -62,11 +62,11 @@ class Litterer extends Enemy {
     private function shoot() {
         var shotAngle = getAngleTowardsPlayer();
         var shotSpeed = MathUtil.lerp(
-            MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+            MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
         );
         var subroutineInterval = MathUtil.lerp(
             MAX_SUBROUTINE_INTERVAL, MIN_SUBROUTINE_INTERVAL,
-            GameScene.difficulty
+            difficulty
         );
         scene.add(new EnemyBullet(
             centerX, centerY, shotSpeed, shotAngle, 0, SHOT_ACCEL,

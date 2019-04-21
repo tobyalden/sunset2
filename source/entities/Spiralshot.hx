@@ -27,8 +27,8 @@ class Spiralshot extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/spiralshot.png");
         graphic = sprite;
@@ -43,7 +43,7 @@ class Spiralshot extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -61,16 +61,16 @@ class Spiralshot extends Enemy {
 
     private function shoot() {
         var bulletsPerShot = MathUtil.ilerp(
-            MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, GameScene.difficulty
+            MIN_BULLETS_PER_SHOT, MAX_BULLETS_PER_SHOT, difficulty
         );
         var spinRate = MathUtil.lerp(
-            MIN_SPIN_RATE, MAX_SPIN_RATE, GameScene.difficulty
+            MIN_SPIN_RATE, MAX_SPIN_RATE, difficulty
         );
         for(i in 0...bulletsPerShot) {
             var spreadAngles = getSpreadAngles(bulletsPerShot + 1, Math.PI * 2);
             var shotAngle = age * spinRate + spreadAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,

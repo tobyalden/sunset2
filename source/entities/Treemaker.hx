@@ -28,8 +28,8 @@ class Treemaker extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/treemaker.png");
         graphic = sprite;
@@ -44,7 +44,7 @@ class Treemaker extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -64,7 +64,7 @@ class Treemaker extends Enemy {
         var shotAngle = getAngleTowardsPlayer();
         var subroutineInterval = MathUtil.lerp(
             MAX_SUBROUTINE_INTERVAL, MIN_SUBROUTINE_INTERVAL,
-            GameScene.difficulty
+            difficulty
         );
         scene.add(new EnemyBullet(
             centerX, centerY, SHOT_SPEED, shotAngle, 0, SHOT_ACCEL,
@@ -75,7 +75,7 @@ class Treemaker extends Enemy {
     private function shotSubroutine(parent:EnemyBullet) {
         var subroutineShotSpeed = MathUtil.lerp(
             MIN_SUBROUTINE_SHOT_SPEED, MAX_SUBROUTINE_SHOT_SPEED,
-            GameScene.difficulty
+            difficulty
         );
         HXP.scene.add(new EnemyBullet(
             parent.centerX, parent.centerY, subroutineShotSpeed,

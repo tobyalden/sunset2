@@ -16,8 +16,9 @@ class Enemy extends Entity {
     private var health:Int;
     private var flickerTimer:Alarm;
     private var age:Float;
+    private var difficulty:Float;
 
-    public function new(x:Float, y:Float, health:Int) {
+    public function new(x:Float, y:Float, health:Int, difficulty:Float) {
         super(x, y);
         this.health = health;
         type = "enemy";

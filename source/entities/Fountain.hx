@@ -25,8 +25,8 @@ class Fountain extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/fountain.png");
         graphic = sprite;
@@ -42,7 +42,7 @@ class Fountain extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -61,10 +61,10 @@ class Fountain extends Enemy {
     private function shoot() {
         var shotAngle = getAngleTowardsPlayer();
         var shotSpeed = MathUtil.lerp(
-            MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+            MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
         );
         var shotAccel = MathUtil.lerp(
-            MIN_SHOT_ACCEL, MAX_SHOT_ACCEL, GameScene.difficulty
+            MIN_SHOT_ACCEL, MAX_SHOT_ACCEL, difficulty
         );
         scene.add(new EnemyBullet(
             centerX, centerY, -shotSpeed, shotAngle, 0,

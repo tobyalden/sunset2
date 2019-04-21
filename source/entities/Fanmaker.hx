@@ -26,8 +26,8 @@ class Fanmaker extends Enemy {
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/fanmaker.png");
         graphic = sprite;
@@ -43,7 +43,7 @@ class Fanmaker extends Enemy {
         var timeBetweenShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SHOTS,
             MIN_TIME_BETWEEN_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         shotTimer = new Alarm(timeBetweenShots, TweenType.Looping);
         shotTimer.onComplete.bind(function() {
@@ -61,7 +61,7 @@ class Fanmaker extends Enemy {
 
     private function shoot() {
         var spread = MathUtil.ilerp(
-            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, GameScene.difficulty
+            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, difficulty
         );
         for(i in 0...BULLETS_PER_SHOT) {
             var spreadAngles = getSpreadAngles(
@@ -69,7 +69,7 @@ class Fanmaker extends Enemy {
             );
             var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,
@@ -79,13 +79,13 @@ class Fanmaker extends Enemy {
                 centerX, centerY, shotSpeed, shotAngle,
                 0, 0.000075, EnemyBullet.BLUE_CIRCLE
             ));
-            if(GameScene.difficulty > 0.5) {
+            if(difficulty > 0.5) {
                 scene.add(new EnemyBullet(
                     centerX, centerY, shotSpeed, shotAngle,
                     0, 0.00005, EnemyBullet.BLUE_CIRCLE
                 ));
             }
-            if(GameScene.difficulty > 0.75) {
+            if(difficulty > 0.75) {
                 scene.add(new EnemyBullet(
                     centerX, centerY, shotSpeed, shotAngle,
                     0, 0.000025, EnemyBullet.BLUE_CIRCLE

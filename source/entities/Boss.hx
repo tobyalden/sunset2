@@ -37,8 +37,8 @@ class Boss extends Enemy {
     private var fastShotTimer:Alarm;
     private var ports:Array<Int>;
 
-    public function new(x:Float) {
-        super(x, -HEIGHT, HEALTH);
+    public function new(x:Float, difficulty:Float) {
+        super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
         sprite = new Image("graphics/boss.png");
         graphic = sprite;
@@ -55,7 +55,7 @@ class Boss extends Enemy {
         var timeBetweenSlowShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_SLOW_SHOTS,
             MIN_TIME_BETWEEN_SLOW_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         slowShotTimer = new Alarm(timeBetweenSlowShots, TweenType.Looping);
         slowShotTimer.onComplete.bind(function() {
@@ -66,7 +66,7 @@ class Boss extends Enemy {
         var timeBetweenFastShots = MathUtil.lerp(
             MAX_TIME_BETWEEN_FAST_SHOTS,
             MIN_TIME_BETWEEN_FAST_SHOTS,
-            GameScene.difficulty
+            difficulty
         );
         fastShotTimer = new Alarm(timeBetweenFastShots, TweenType.Looping);
         fastShotTimer.onComplete.bind(function() {
@@ -137,16 +137,16 @@ class Boss extends Enemy {
 
     private function shootSpiral(shotOriginX:Float, shotOriginY:Float) {
         var bulletsPerShot = MathUtil.ilerp(
-            2, 4, GameScene.difficulty
+            2, 4, difficulty
         );
         var spinRate = MathUtil.lerp(
-            MIN_SPIN_RATE, MAX_SPIN_RATE, GameScene.difficulty
+            MIN_SPIN_RATE, MAX_SPIN_RATE, difficulty
         );
         for(i in 0...bulletsPerShot) {
             var spreadAngles = getSpreadAngles(bulletsPerShot + 1, Math.PI * 2);
             var shotAngle = age * spinRate + spreadAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 shotOriginX, shotOriginY, shotSpeed, shotAngle,
@@ -157,7 +157,7 @@ class Boss extends Enemy {
 
     private function shootRing(shotOriginX:Float, shotOriginY:Float) {
         var bulletsPerShot = MathUtil.ilerp(
-            7, 25, GameScene.difficulty
+            7, 25, difficulty
         );
         if(bulletsPerShot % 2 == 0) {
             // Always shoot an odd # of bullets so one is aimed at the player
@@ -168,7 +168,7 @@ class Boss extends Enemy {
             var spreadAngles = getSpreadAngles(bulletsPerShot, Math.PI * 2);
             var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 shotOriginX, shotOriginY, shotSpeed, shotAngle,
@@ -179,10 +179,10 @@ class Boss extends Enemy {
 
     private function shootSpray(shotOriginX:Float, shotOriginY:Float) {
         var bulletsPerShot = MathUtil.ilerp(
-            1, 3, GameScene.difficulty
+            1, 3, difficulty
         );
         var spread = MathUtil.ilerp(
-            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, GameScene.difficulty
+            MIN_SHOT_SPREAD, MAX_SHOT_SPREAD, difficulty
         );
         for(i in 0...bulletsPerShot) {
             var sprayAngles = getSprayAngles(
@@ -190,7 +190,7 @@ class Boss extends Enemy {
             );
             var shotAngle = getAngleTowardsPlayer() + sprayAngles[i];
             var shotSpeed = MathUtil.lerp(
-                MIN_SHOT_SPEED, MAX_SHOT_SPEED, GameScene.difficulty
+                MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
             scene.add(new EnemyBullet(
                 shotOriginX, shotOriginY, shotSpeed, shotAngle,
