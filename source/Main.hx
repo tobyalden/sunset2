@@ -168,6 +168,10 @@ class Main extends Engine
         return false;
     }
 
+    public static function isSlowmo() {
+        return inputCheck("shoot");
+    }
+
     public static function getTimeFactor() {
         if(!inputCheck("shoot")) {
             return 0.4;

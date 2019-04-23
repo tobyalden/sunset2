@@ -19,17 +19,20 @@ class Fanmaker extends Enemy {
     public static inline var MAX_SHOT_SPEED = 0.12;
     public static inline var MIN_SHOT_SPREAD = 30;
     public static inline var MAX_SHOT_SPREAD = 15; // Math.PI * 2 / SPREAD
-    public static inline var HEIGHT = 24;
+    public static inline var WIDTH = 48;
+    public static inline var HEIGHT = 23;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/fanmaker.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 0, 32 - HEIGHT);
+        sprite = new Spritemap("graphics/48enemies.png", 48, 32);
+        sprite.add("lips", [0, 1, 2, 3], 5);
+        sprite.add("lipsslow", [4, 5, 6, 7], 5);
         graphic = sprite;
 
         dropDistance = GameScene.getEnemyYPosition();
@@ -53,6 +56,14 @@ class Fanmaker extends Enemy {
     }
 
     override public function update() {
+        var percent = shotTimer.percent;
+        if(dropTween.active) {
+            percent = dropTween.percent;
+        }
+        sprite.setAnimFrame(
+            Main.isSlowmo() ? "lipsslow" : "lips",
+            [3, 2, 1, 0, 1, 2, 3][MathUtil.ilerp(0, 6, percent)]
+        );
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
