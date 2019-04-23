@@ -18,17 +18,20 @@ class Ringshot extends Enemy {
     public static inline var MAX_BULLETS_PER_SHOT = 25;
     public static inline var MIN_SHOT_SPEED = 0.08;
     public static inline var MAX_SHOT_SPEED = 0.12;
-    public static inline var HEIGHT = 24;
+    public static inline var WIDTH = 19;
+    public static inline var HEIGHT = 23;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/ringshot.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 2, 24 - HEIGHT);
+        sprite = new Spritemap("graphics/24enemies.png", 24, 24);
+        sprite.add("fan", [0, 1], 5);
+        sprite.add("fanslow", [2, 3], 5);
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -51,6 +54,10 @@ class Ringshot extends Enemy {
     }
 
     override public function update() {
+        sprite.setAnimFrame(
+            Main.isSlowmo() ? "fanslow" : "fan",
+            [0, 1][MathUtil.ilerp(0, 1, ((age * 4) % 1))]
+        );
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
