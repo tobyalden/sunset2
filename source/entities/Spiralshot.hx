@@ -22,7 +22,7 @@ class Spiralshot extends Enemy {
     public static inline var MAX_SPIN_RATE = 4;
     public static inline var HEIGHT = 24;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
@@ -30,7 +30,9 @@ class Spiralshot extends Enemy {
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
         mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/spiralshot.png");
+        sprite = new Spritemap("graphics/24enemies.png", 24, 24);
+        sprite.add("clock", [11, 12, 13], 5);
+        sprite.add("clockslow", [17, 18, 19], 5);
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -53,6 +55,10 @@ class Spiralshot extends Enemy {
     }
 
     override public function update() {
+        sprite.setAnimFrame(
+            Main.isSlowmo() ? "clockslow" : "clock",
+            [0, 1, 2][MathUtil.ilerp(0, 2, ((age * 4) % 1))]
+        );
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
