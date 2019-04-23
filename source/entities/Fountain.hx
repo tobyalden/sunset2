@@ -18,17 +18,20 @@ class Fountain extends Enemy {
     public static inline var MAX_SHOT_SPEED = 0.15;
     public static inline var MIN_SHOT_ACCEL = 0.0001;
     public static inline var MAX_SHOT_ACCEL = 0.0002;
-    public static inline var HEIGHT = 24;
+    public static inline var WIDTH = 32;
+    public static inline var HEIGHT = 25;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/fountain.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 0, 32 - HEIGHT);
+        sprite = new Spritemap("graphics/32enemies.png", 32, 32);
+        sprite.add("kettle", [6, 7, 8, 9], 5);
+        sprite.add("kettleslow", [10, 11, 12, 13], 5);
         graphic = sprite;
 
         dropDistance = GameScene.getEnemyYPosition();
@@ -52,6 +55,14 @@ class Fountain extends Enemy {
     }
 
     override public function update() {
+        var percent = shotTimer.percent;
+        if(dropTween.active) {
+            percent = dropTween.percent;
+        }
+        sprite.setAnimFrame(
+            Main.isSlowmo() ? "kettleslow" : "kettle",
+            [3, 2, 1, 0, 1, 2, 3][MathUtil.ilerp(0, 6, percent)]
+        );
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );

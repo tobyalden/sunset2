@@ -64,9 +64,6 @@ class EnemyBullet extends Entity {
 
     override public function update() {
         speed += accel * Main.getDelta();
-        if(speed < 0) {
-            speed = 0;
-        }
         var velocity = new Vector2(0, speed);
         angle += rotation * Main.getDelta();
         velocity.rotate(angle);
