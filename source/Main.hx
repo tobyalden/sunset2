@@ -169,7 +169,7 @@ class Main extends Engine
     }
 
     public static function isSlowmo() {
-        return inputCheck("shoot");
+        return !inputCheck("shoot");
     }
 
     public static function getTimeFactor() {

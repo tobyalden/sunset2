@@ -17,22 +17,24 @@ class Fireworker extends Enemy {
     public static inline var MIN_SHOT_SPEED = 0.15;
     public static inline var MAX_SHOT_SPEED = 0.24;
     public static inline var SHOT_ACCEL = -0.00016;
-    public static inline var HEIGHT = 24;
     public static inline var MIN_BULLETS_PER_SUBROUTINE_SHOT = 8;
     public static inline var MAX_BULLETS_PER_SUBROUTINE_SHOT = 16;
     public static inline var SUBROUTINE_SHOT_SPEED = 0.1;
     public static inline var SUBROUTINE_SHOT_ACCEL = 0.000035;
-    public static inline var SUBROUTINE_Sb = 0.000035;
+    public static inline var WIDTH = 48;
+    public static inline var HEIGHT = 26;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/fireworker.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 0, 32 - HEIGHT - 2);
+        sprite = new Spritemap("graphics/48enemies.png", 48, 32);
+        sprite.add("eye", [8, 9, 10, 11], 5);
+        sprite.add("eyeslow", [14, 15, 16, 17], 5);
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -55,6 +57,14 @@ class Fireworker extends Enemy {
     }
 
     override public function update() {
+        var percent = shotTimer.percent;
+        if(dropTween.active) {
+            percent = dropTween.percent;
+        }
+        sprite.setAnimFrame(
+            Main.isSlowmo() ? "eyeslow" : "eye",
+            [3, 2, 1, 0, 1, 2, 3][MathUtil.ilerp(0, 6, percent)]
+        );
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
