@@ -20,17 +20,20 @@ class Sprayer extends Enemy {
     public static inline var MAX_SHOT_SPEED = 0.12;
     public static inline var MIN_SHOT_SPREAD = 16;
     public static inline var MAX_SHOT_SPREAD = 8; // Math.PI * 2 / SPREAD
-    public static inline var HEIGHT = 24;
+    public static inline var WIDTH = 22;
+    public static inline var HEIGHT = 16;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/sprayer.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 1, 3);
+        sprite = new Spritemap("graphics/24enemies.png", 24, 24);
+        sprite.add("egg", [8, 9, 10], 5);
+        sprite.add("eggslow", [14, 15, 16], 5);
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -53,6 +56,14 @@ class Sprayer extends Enemy {
     }
 
     override public function update() {
+        var percent = shotTimer.percent;
+        if(dropTween.active) {
+            percent = dropTween.percent;
+        }
+        sprite.setAnimFrame(
+            Main.isSlowmo() ? "eggslow" : "egg",
+            [2, 1, 0, 1, 2][MathUtil.ilerp(0, 4, percent)]
+        );
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
