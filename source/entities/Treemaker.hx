@@ -16,22 +16,25 @@ class Treemaker extends Enemy {
     public static inline var MAX_TIME_BETWEEN_SHOTS = 3.5;
     public static inline var SHOT_SPEED = 0.1;
     public static inline var SHOT_ACCEL = 0.000075;
-    public static inline var HEIGHT = 24;
     public static inline var MIN_SUBROUTINE_INTERVAL = 0.2;
     public static inline var MAX_SUBROUTINE_INTERVAL = 0.8;
     public static inline var MIN_SUBROUTINE_SHOT_SPEED = 0.06;
     public static inline var MAX_SUBROUTINE_SHOT_SPEED = 0.08;
     public static inline var SUBROUTINE_SHOT_ACCEL = 0.000035;
+    public static inline var WIDTH = 19;
+    public static inline var HEIGHT = 24;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/treemaker.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 3, 0);
+        sprite = new Spritemap("graphics/24enemies.png", 24, 24);
+        sprite.add("lightbulb", [4, 5], 5);
+        sprite.add("lightbulbslow", [6, 7], 5);
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -54,6 +57,20 @@ class Treemaker extends Enemy {
     }
 
     override public function update() {
+        var percent = shotTimer.percent;
+        if(dropTween.active) {
+            percent = dropTween.percent;
+            sprite.setAnimFrame(
+                Main.isSlowmo() ? "lightbulbslow" : "lightbulb",
+                [0, 0, 0, 0, 0, 0, 0, 1][MathUtil.ilerp(0, 6, percent)]
+            );
+        }
+        else {
+            sprite.setAnimFrame(
+                Main.isSlowmo() ? "lightbulbslow" : "lightbulb",
+                [1, 0, 0, 0, 0, 0, 0, 1][MathUtil.ilerp(0, 6, percent)]
+            );
+        }
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
