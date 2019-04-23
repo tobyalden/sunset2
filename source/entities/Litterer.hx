@@ -17,20 +17,23 @@ class Litterer extends Enemy {
     public static inline var MIN_SHOT_SPEED = 0.15;
     public static inline var MAX_SHOT_SPEED = 0.2;
     public static inline var SHOT_ACCEL = 0.000015;
-    public static inline var HEIGHT = 24;
     public static inline var MIN_SUBROUTINE_INTERVAL = 0.2;
     public static inline var MAX_SUBROUTINE_INTERVAL = 0.8;
     public static inline var SUBROUTINE_SHOT_ACCEL = 0.000054;
+    public static inline var WIDTH = 32;
+    public static inline var HEIGHT = 25;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var shotTimer:Alarm;
 
     public function new(x:Float, difficulty:Float) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(HEIGHT, HEIGHT);
-        sprite = new Image("graphics/litterer.png");
+        mask = new Hitbox(WIDTH, HEIGHT, 0, 32 - HEIGHT);
+        sprite = new Spritemap("graphics/32enemies.png", 32, 32);
+        sprite.add("toaster", [0, 1, 2], 5);
+        sprite.add("toasterslow", [3, 4, 5], 5);
         graphic = sprite;
         dropDistance = GameScene.getEnemyYPosition();
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -53,6 +56,24 @@ class Litterer extends Enemy {
     }
 
     override public function update() {
+        var percent = shotTimer.percent;
+        if(dropTween.active) {
+            percent = dropTween.percent;
+            sprite.setAnimFrame(
+                Main.isSlowmo() ? "toasterslow" : "toaster",
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2][
+                    MathUtil.ilerp(0, 20, percent)
+                ]
+            );
+        }
+        else {
+            sprite.setAnimFrame(
+                Main.isSlowmo() ? "toasterslow" : "toaster",
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2][
+                    MathUtil.ilerp(0, 20, percent)
+                ]
+            );
+        }
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
