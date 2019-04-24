@@ -11,13 +11,17 @@ import scenes.*;
 class Player extends Entity {
     public static inline var SPEED = 0.175;
     public static inline var SHOT_COOLDOWN = 0.025;
+    public static inline var INVINCIBLE_TIME_ON_RESPAWN = 1;
+    public static inline var FLICKER_SPEED = 0.05;
 
     public var velocity(default, null):Vector2;
     public var sprite(default, null):Spritemap;
     private var shotCooldown:Alarm;
     private var sfx:Map<String, Sfx>;
+    private var isDead:Bool;
+    private var invincibilityTimer:Alarm;
 
-    public function new(x:Int, y:Int) {
+    public function new(x:Float, y:Float) {
         super(x, y);
         name = "player";
 
@@ -33,11 +37,18 @@ class Player extends Entity {
         shotCooldown = new Alarm(SHOT_COOLDOWN, TweenType.Persist);
         addTween(shotCooldown);
 
+        invincibilityTimer = new Alarm(
+            INVINCIBLE_TIME_ON_RESPAWN, TweenType.Persist
+        );
+        addTween(invincibilityTimer);
+
         sfx = [
             'shoot1' => new Sfx('audio/shoot1.wav'),
             'shoot2' => new Sfx('audio/shoot2.wav'),
             'shoot3' => new Sfx('audio/shoot3.wav')
         ];
+
+        isDead = false;
     }
 
     private function explode(numExplosions:Int) {
@@ -73,24 +84,43 @@ class Player extends Entity {
     }
 
     override public function update() {
-        movement();
-        shooting();
-        if(
-            collide("enemybullet", x , y) != null
-            || collide("enemy", x , y) != null
-        ) {
-            explode(23);
+        if(isDead) {
             visible = false;
-            var resetTimer = new Alarm(2, TweenType.OneShot);
-            resetTimer.onComplete.bind(function() {
-                HXP.scene = new GameScene();
-            });
-            addTween(resetTimer, true);
+        }
+        else if(invincibilityTimer.active) {
+            visible = Math.floor(
+                invincibilityTimer.elapsed / FLICKER_SPEED
+            ) % 2 == 0;
         }
         else {
-            sprite.color = 0xFFFFFF;
+            visible = true;
+        }
+
+        if(!isDead) {
+            movement();
+            shooting();
+            if(
+                collide("enemybullet", x , y) != null
+                || collide("enemy", x , y) != null
+            ) {
+                isDead = true;
+                explode(23);
+                visible = false;
+                var resetTimer = new Alarm(1, TweenType.OneShot);
+                resetTimer.onComplete.bind(function() {
+                    respawn();
+                });
+                addTween(resetTimer, true);
+            }
         }
         super.update();
+    }
+
+    private function respawn() {
+        x = HXP.width / 2 - 8;
+        y = HXP.height - 100;
+        isDead = false;
+        invincibilityTimer.start();
     }
 
     private function movement() {

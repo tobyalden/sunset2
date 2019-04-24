@@ -29,13 +29,13 @@ class Enemy extends Entity {
 
     override public function update() {
         if(flickerTimer.active) {
-            graphic.color = 0xFF0000;
+            //graphic.color = 0xFF0000;
             visible = Math.floor(
                 flickerTimer.elapsed / FLICKER_SPEED
             ) % 2 == 0;
         }
         else {
-            graphic.color = 0xFFFFFF;
+            //graphic.color = 0xFFFFFF;
             visible = true;
         }
         if(x < -width || x > HXP.width || y > HXP.height) {
