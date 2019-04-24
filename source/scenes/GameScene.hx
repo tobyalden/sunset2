@@ -32,16 +32,19 @@ class GameScene extends Scene
             0, 0, new Backdrop('graphics/background.png')
         );
         background.layer = 10;
-        //add(background);
-        player = new Player(100, HXP.height - 100);
+        add(background);
+        player = new Player(HXP.width / 2 - 8, HXP.height - 100);
         add(player);
+
+        add(new HUD());
 
         waves = [
             // Enemy count trigger, difficulty, enemy list
             [2, 0.4, "fanmaker,ringshot"],
             [1, 0.2, "fireworker,fountain"],
-            [0, 1, "spiralshot"],
             [2, 0.4, "litterer,fountain"],
+            [2, 0.4, "spiralshot,sprayer"],
+            [2, 0.4, "treemaker,fanmaker"],
             [0, 0, "boss"]
         ];
         waveCount = 0;
@@ -118,6 +121,7 @@ class GameScene extends Scene
     }
 
     override public function update() {
+        background.visible = !Main.isSlowmo();
         background.y -= SCROLL_SPEED * Main.getDelta();
         if(background.y > HXP.height) {
             background.y -= HXP.height;

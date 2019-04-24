@@ -123,13 +123,16 @@ class Player extends Entity {
                 || collide("enemy", x , y) != null
             ) {
                 isDead = true;
+                lives -= 1;
                 explode(23);
                 visible = false;
-                var resetTimer = new Alarm(1, TweenType.OneShot);
-                resetTimer.onComplete.bind(function() {
-                    respawn();
-                });
-                addTween(resetTimer, true);
+                if(lives > 0) {
+                    var resetTimer = new Alarm(1, TweenType.OneShot);
+                    resetTimer.onComplete.bind(function() {
+                        respawn();
+                    });
+                    addTween(resetTimer, true);
+                }
             }
         }
         age += Main.getDelta() / 1000;
