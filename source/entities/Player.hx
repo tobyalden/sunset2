@@ -16,10 +16,13 @@ class Player extends Entity {
 
     public var velocity(default, null):Vector2;
     public var sprite(default, null):Spritemap;
+    public var heart(default, null):Spritemap;
+    public var lives(default, null):Int;
     private var shotCooldown:Alarm;
     private var sfx:Map<String, Sfx>;
     private var isDead:Bool;
     private var invincibilityTimer:Alarm;
+    private var age:Float;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -29,10 +32,15 @@ class Player extends Entity {
         mask = new Hitbox(4, 4, 6, 6);
 
         sprite = new Spritemap('graphics/player.png', 16, 16);
-        sprite.add('idle', [0]);
-        sprite.add('right', [1]);
-        sprite.add('left', [2]);
-        graphic = sprite;
+        sprite.add('idle', [5, 6, 7]);
+        sprite.add('idleslow', [1, 2, 3]);
+
+        heart = new Spritemap('graphics/player.png', 16, 16);
+        heart.add('idle', [4]);
+        heart.add('idleslow', [0]);
+
+        addGraphic(sprite);
+        addGraphic(heart);
 
         shotCooldown = new Alarm(SHOT_COOLDOWN, TweenType.Persist);
         addTween(shotCooldown);
@@ -49,6 +57,8 @@ class Player extends Entity {
         ];
 
         isDead = false;
+        lives = 3;
+        age = 0;
     }
 
     private function explode(numExplosions:Int) {
@@ -99,6 +109,15 @@ class Player extends Entity {
         if(!isDead) {
             movement();
             shooting();
+
+            sprite.setAnimFrame(
+                Main.isSlowmo() ? "idle" : "idleslow",
+                [0, 1, 2, 1, 0][MathUtil.ilerp(0, 5, ((age * 4) % 1))]
+            );
+            heart.setAnimFrame(
+                Main.isSlowmo() ? "idle" : "idleslow", 0
+            );
+
             if(
                 collide("enemybullet", x , y) != null
                 || collide("enemy", x , y) != null
@@ -113,6 +132,7 @@ class Player extends Entity {
                 addTween(resetTimer, true);
             }
         }
+        age += Main.getDelta() / 1000;
         super.update();
     }
 
@@ -135,15 +155,12 @@ class Player extends Entity {
         }
         if(Main.inputCheck('left')) {
             velocity.x = -SPEED;
-            sprite.play("left");
         }
         else if(Main.inputCheck('right')) {
             velocity.x = SPEED;
-            sprite.play("right");
         }
         else {
             velocity.x = 0;
-            sprite.play("idle");
         }
         moveBy(
             velocity.x * Main.getDelta(),
