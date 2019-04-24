@@ -83,6 +83,9 @@ class Enemy extends Entity {
     private function die() {
         explode(4);
         scene.remove(this); 
+        for(i in 0...(3 + Random.randInt(3))) {
+            scene.add(new Coin(centerX, centerY));
+        }
     }
 
     private function explode(numExplosions:Int) {

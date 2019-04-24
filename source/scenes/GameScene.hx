@@ -22,6 +22,9 @@ class GameScene extends Scene
     private var player:Player;
     private var waveTimer:Alarm;
 
+    private var instrumental:Sfx;
+    private var drums:Sfx;
+
     static public function getEnemyYPosition() {
         return HXP.choose(20, 40, 80, 100, 120, 140);
         //return 400;
@@ -55,6 +58,12 @@ class GameScene extends Scene
         });
         addTween(waveTimer, true);
         sendWave();
+
+        instrumental = new Sfx("audio/instrumental.wav");
+        drums = new Sfx("audio/drums.wav");
+        instrumental.play();
+        drums.volume = 0;
+        drums.play();
     }
 
     private function sendWave() {
@@ -126,6 +135,8 @@ class GameScene extends Scene
         if(background.y > HXP.height) {
             background.y -= HXP.height;
         }
+
+        drums.volume = Main.isSlowmo() ? 0 : 1;
 
         // The code below is copied from haxepunk/Scene.hx
         // so we can use our time factor in e.updateTweens()

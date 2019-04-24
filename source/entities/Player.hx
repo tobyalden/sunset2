@@ -18,6 +18,7 @@ class Player extends Entity {
     public var sprite(default, null):Spritemap;
     public var heart(default, null):Spritemap;
     public var lives(default, null):Int;
+    public var coins(default, null):Int;
     private var shotCooldown:Alarm;
     private var sfx:Map<String, Sfx>;
     private var isDead:Bool;
@@ -32,12 +33,12 @@ class Player extends Entity {
         mask = new Hitbox(4, 4, 6, 6);
 
         sprite = new Spritemap('graphics/player.png', 16, 16);
-        sprite.add('idle', [5, 6, 7]);
-        sprite.add('idleslow', [1, 2, 3]);
+        sprite.add('idleslow', [5, 6, 7]);
+        sprite.add('idle', [1, 2, 3]);
 
         heart = new Spritemap('graphics/player.png', 16, 16);
-        heart.add('idle', [4]);
-        heart.add('idleslow', [0]);
+        heart.add('idleslow', [4]);
+        heart.add('idle', [0]);
 
         addGraphic(sprite);
         addGraphic(heart);
@@ -58,6 +59,7 @@ class Player extends Entity {
 
         isDead = false;
         lives = 3;
+        coins = 0;
         age = 0;
     }
 
@@ -106,6 +108,11 @@ class Player extends Entity {
             visible = true;
         }
 
+        if(coins >= 100) {
+            coins -= 100;
+            lives++;
+        }
+
         if(!isDead) {
             movement();
             shooting();
@@ -117,6 +124,12 @@ class Player extends Entity {
             heart.setAnimFrame(
                 Main.isSlowmo() ? "idle" : "idleslow", 0
             );
+
+            var coin = collide("coin", x , y);
+            if(coin != null) {
+                scene.remove(coin);
+                coins++;
+            }
 
             if(
                 collide("enemybullet", x , y) != null
