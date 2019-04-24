@@ -10,7 +10,7 @@ import entities.*;
 class GameScene extends Scene
 {
     public static inline var SCROLL_SPEED = 0.1;
-    public static inline var TIME_BETWEEN_WAVES = 2;
+    public static inline var TIME_BETWEEN_WAVES = 3;
     public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 1;
 
@@ -48,6 +48,38 @@ class GameScene extends Scene
         return yPosition;
     }
 
+    private function getEasyWave():Array<Dynamic> {
+        // Enemy count trigger, difficulty, enemy list
+        var trigger = HXP.choose(1, 2);
+        var difficulty = (
+            trigger > 1 ? HXP.choose(0, 0.2, 0.4) : HXP.choose(0.5, 0.6, 0.7)
+        );
+        var numEnemies = (
+            trigger > 1 ? 1 : HXP.choose(1, 2)
+        );
+        var enemyNameArray = new Array<String>();
+        for(num in 0...cast(numEnemies, Int)) {
+            enemyNameArray.push(getRandomEnemyName());
+        }
+        var enemyNames = enemyNameArray.join(',');
+        return [trigger, difficulty, enemyNames];
+    }
+
+    private function getNormalWave():Array<Dynamic> {
+        // Enemy count trigger, difficulty, enemy list
+        var trigger = HXP.choose(1, 2, 3, 4);
+        var difficulty = (
+            trigger > 2 ? HXP.choose(0.5, 0.6, 0.7) : HXP.choose(0.8, 0.9, 1)
+        );
+        var numEnemies = HXP.choose(2, 3, 4);
+        var enemyNameArray = new Array<String>();
+        for(num in 0...cast(numEnemies, Int)) {
+            enemyNameArray.push(getRandomEnemyName());
+        }
+        var enemyNames = enemyNameArray.join(',');
+        return [trigger, difficulty, enemyNames];
+    }
+
     override public function begin() {
         enemyPositions = new Map<String, Entity>();
         background = new Entity(
@@ -60,80 +92,11 @@ class GameScene extends Scene
 
         add(new HUD());
 
-        waves = [
-            // Enemy count trigger, difficulty, enemy list
-            [
-                2,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.1, 0.2, 0.3),
-                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                2,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                4,
-                HXP.choose(0.1, 0.2, 0.3),
-                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                2,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                4,
-                HXP.choose(0.1, 0.2, 0.3),
-                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                3,
-                HXP.choose(0.7, 0.8, 0.9, 1),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [
-                4,
-                HXP.choose(0.1, 0.2, 0.3),
-                '${getRandomEnemyName()},${getRandomEnemyName()}'
-            ],
-            [0, 0, "boss"]
-        ];
+        waves = new Array<Array<Dynamic>>();
+        for(i in 0...10) {
+            waves.push(getNormalWave());
+        }
+        waves.push([0, 0, "boss"]);
         waveCount = 0;
 
         waveTimer = new Alarm(TIME_BETWEEN_WAVES, TweenType.Looping);
