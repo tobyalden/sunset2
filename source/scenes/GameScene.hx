@@ -25,12 +25,31 @@ class GameScene extends Scene
     private var instrumental:Sfx;
     private var drums:Sfx;
 
-    static public function getEnemyYPosition() {
-        return HXP.choose(20, 40, 80, 100, 120, 140);
-        //return 400;
+    static public var enemyPositions(default, null):Map<String, Entity>;
+
+    static public function freeEnemyPosition(enemy:Entity) {
+        for(key in enemyPositions.keys()) {
+            if(enemyPositions[key] == enemy) {
+                enemyPositions.remove(key);
+            }
+        }
+    }
+
+    static public function getEnemyYPosition(enemy:Entity):Float {
+        var yPosition:Float = HXP.choose(30, 65, 100, 135);
+        var key = '${enemy.x}-${yPosition}';
+        var count = 0;
+        while(enemyPositions.exists(key) && count < 1000) {
+            yPosition = HXP.choose(30, 65, 100, 135);
+            key = '${enemy.x}-${yPosition}';
+            count++;
+        }
+        enemyPositions.set(key, enemy);
+        return yPosition;
     }
 
     override public function begin() {
+        enemyPositions = new Map<String, Entity>();
         background = new Entity(
             0, 0, new Backdrop('graphics/background.png')
         );
@@ -194,8 +213,8 @@ class GameScene extends Scene
 
     private function getEnemyXPositions() {
         var enemyPositions = new Array<Int>();
-        for(i in 0...5) {
-            enemyPositions.push(i * 2 * 24 + 12);
+        for(i in 0...4) {
+            enemyPositions.push(i * 55 + 17);
         }
         HXP.shuffle(enemyPositions);
         return enemyPositions;

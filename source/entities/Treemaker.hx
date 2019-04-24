@@ -36,7 +36,7 @@ class Treemaker extends Enemy {
         sprite.add("lightbulb", [4, 5], 5);
         sprite.add("lightbulbslow", [6, 7], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

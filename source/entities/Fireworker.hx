@@ -36,7 +36,7 @@ class Fireworker extends Enemy {
         sprite.add("eye", [8, 9, 10, 11], 5);
         sprite.add("eyeslow", [14, 15, 16, 17], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

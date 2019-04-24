@@ -34,7 +34,7 @@ class Fountain extends Enemy {
         sprite.add("kettleslow", [10, 11, 12, 13], 5);
         graphic = sprite;
 
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

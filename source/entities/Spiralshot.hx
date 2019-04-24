@@ -34,7 +34,7 @@ class Spiralshot extends Enemy {
         sprite.add("clock", [11, 12, 13], 5);
         sprite.add("clockslow", [17, 18, 19], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

@@ -35,7 +35,7 @@ class Litterer extends Enemy {
         sprite.add("toaster", [0, 1, 2], 5);
         sprite.add("toasterslow", [3, 4, 5], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

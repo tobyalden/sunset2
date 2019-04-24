@@ -33,7 +33,7 @@ class Ringshot extends Enemy {
         sprite.add("fan", [0, 1], 5);
         sprite.add("fanslow", [2, 3], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

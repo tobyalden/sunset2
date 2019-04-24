@@ -35,7 +35,7 @@ class Fanmaker extends Enemy {
         sprite.add("lipsslow", [4, 5, 6, 7], 5);
         graphic = sprite;
 
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

@@ -36,7 +36,7 @@ class Scatterer extends Enemy {
         sprite.add("tv", [14, 15, 16, 17, 18, 19, 20], 5);
         sprite.add("tvslow", [21, 22, 23, 24, 25, 26, 27], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();

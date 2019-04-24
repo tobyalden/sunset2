@@ -6,6 +6,7 @@ import haxepunk.masks.*;
 import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
+import scenes.*;
 
 class Enemy extends Entity {
     public static inline var FLICKER_DURATION = 0.2;
@@ -83,6 +84,7 @@ class Enemy extends Entity {
     private function die() {
         explode(4);
         scene.remove(this); 
+        GameScene.freeEnemyPosition(this);
         for(i in 0...(3 + Random.randInt(3))) {
             scene.add(new Coin(centerX, centerY));
         }

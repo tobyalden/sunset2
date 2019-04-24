@@ -35,7 +35,7 @@ class Sprayer extends Enemy {
         sprite.add("egg", [8, 9, 10], 5);
         sprite.add("eggslow", [14, 15, 16], 5);
         graphic = sprite;
-        dropDistance = GameScene.getEnemyYPosition();
+        dropDistance = GameScene.getEnemyYPosition(this);
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
         dropTween.onComplete.bind(function() {
             shoot();
