@@ -2,6 +2,7 @@ import haxepunk.*;
 import haxepunk.debug.Console;
 import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
+import haxepunk.screen.UniformScaleMode;
 import scenes.*;
 
 class Main extends Engine
@@ -19,6 +20,7 @@ class Main extends Engine
     }
 
     override public function init() {
+        HXP.screen.scaleMode = new UniformScaleMode(UniformScaleType.Expand);
 #if debug
         Console.enable();
 #end

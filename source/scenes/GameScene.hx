@@ -43,11 +43,76 @@ class GameScene extends Scene
 
         waves = [
             // Enemy count trigger, difficulty, enemy list
-            [2, 0.4, "fanmaker,ringshot"],
-            [1, 0.2, "fireworker,fountain"],
-            [2, 0.4, "litterer,fountain"],
-            [2, 0.4, "spiralshot,sprayer"],
-            [2, 0.4, "treemaker,fanmaker"],
+            [
+                2,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.1, 0.2, 0.3),
+                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                2,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                4,
+                HXP.choose(0.1, 0.2, 0.3),
+                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                2,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                4,
+                HXP.choose(0.1, 0.2, 0.3),
+                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                3,
+                HXP.choose(0.7, 0.8, 0.9, 1),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
+            [
+                4,
+                HXP.choose(0.1, 0.2, 0.3),
+                '${getRandomEnemyName()},${getRandomEnemyName()}'
+            ],
             [0, 0, "boss"]
         ];
         waveCount = 0;
@@ -61,13 +126,20 @@ class GameScene extends Scene
 
         instrumental = new Sfx("audio/instrumental.wav");
         drums = new Sfx("audio/drums.wav");
-        instrumental.play();
+        //instrumental.play();
         drums.volume = 0;
-        drums.play();
+        //drums.play();
+    }
+
+    private function getRandomEnemyName() {
+        return HXP.choose(
+            "fanmaker", "fireworker", "fountain", "litterer", "ringshot",
+            "scatterer", "spiralshot", "sprayer", "treemaker"
+        );
+
     }
 
     private function sendWave() {
-        trace('what is waves? ${Type.getClass(waves)}');
         var wave = waves[waveCount];
         if(wave == null) {
             return;

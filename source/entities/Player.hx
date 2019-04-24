@@ -54,7 +54,14 @@ class Player extends Entity {
         sfx = [
             'shoot1' => new Sfx('audio/shoot1.wav'),
             'shoot2' => new Sfx('audio/shoot2.wav'),
-            'shoot3' => new Sfx('audio/shoot3.wav')
+            'shoot3' => new Sfx('audio/shoot3.wav'),
+            'coin1' => new Sfx('audio/coin1.wav'),
+            'coin2' => new Sfx('audio/coin2.wav'),
+            'coin3' => new Sfx('audio/coin3.wav'),
+            'coin4' => new Sfx('audio/coin4.wav'),
+            'coin5' => new Sfx('audio/coin5.wav'),
+            'playerdeath' => new Sfx('audio/playerdeath.wav'),
+            'respawn' => new Sfx('audio/respawn.wav')
         ];
 
         isDead = false;
@@ -127,29 +134,39 @@ class Player extends Entity {
 
             var coin = collide("coin", x , y);
             if(coin != null) {
+                sfx['coin${HXP.choose(1, 2, 3, 4, 5)}'].play();
                 scene.remove(coin);
                 coins++;
             }
 
             if(
-                collide("enemybullet", x , y) != null
+                !invincibilityTimer.active
+                && collide("enemybullet", x , y) != null
                 || collide("enemy", x , y) != null
             ) {
-                isDead = true;
-                lives -= 1;
-                explode(23);
-                visible = false;
-                if(lives > 0) {
-                    var resetTimer = new Alarm(1, TweenType.OneShot);
-                    resetTimer.onComplete.bind(function() {
-                        respawn();
-                    });
-                    addTween(resetTimer, true);
-                }
+                die();
             }
         }
         age += Main.getDelta() / 1000;
         super.update();
+    }
+
+    private function die() {
+        isDead = true;
+        lives -= 1;
+        explode(23);
+        sfx['playerdeath'].play();
+        visible = false;
+        var resetTimer = new Alarm(1, TweenType.OneShot);
+        resetTimer.onComplete.bind(function() {
+            if(lives > 0) {
+                respawn();
+            }
+            else {
+                HXP.scene = new GameScene();
+            }
+        });
+        addTween(resetTimer, true);
     }
 
     private function respawn() {
@@ -157,6 +174,7 @@ class Player extends Entity {
         y = HXP.height - 100;
         isDead = false;
         invincibilityTimer.start();
+        sfx['respawn'].play();
     }
 
     private function movement() {
@@ -185,9 +203,9 @@ class Player extends Entity {
 
         // Don't let the player leave the screen
         x = Math.max(x, 0);
-        x = Math.min(x, HXP.width - width);
+        x = Math.min(x, HXP.width - 16);
         y = Math.max(y, 0);
-        y = Math.min(y, HXP.height - height);
+        y = Math.min(y, HXP.height - 16);
     }
 
     private function shooting() {

@@ -11,7 +11,7 @@ import scenes.*;
 
 class Boss extends Enemy {
     public static inline var DROP_TIME = 1;
-    public static inline var HEALTH = 1000;
+    public static inline var HEALTH = 500;
     public static inline var HEIGHT = 120;
 
     public static inline var MIN_TIME_BETWEEN_SLOW_SHOTS = 0.5;
@@ -76,8 +76,8 @@ class Boss extends Enemy {
 
         if(difficulty == 0) {
             ports = [
-                RING_PORT, EMPTY_PORT, RING_PORT,
-                EMPTY_PORT, SPRAY_PORT, EMPTY_PORT
+                RING_PORT, SPRAY_PORT, RING_PORT,
+                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
             ];
         }
         else {

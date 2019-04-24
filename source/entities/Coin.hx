@@ -24,7 +24,7 @@ class Coin extends Entity {
     public function new(x:Float, y:Float) {
         super(x - 5, y - 5);
         type = "coin";
-        mask = new Hitbox(10, 10);
+        mask = new Hitbox(22, 22, -6, -6);
         sprite = new Image("graphics/coin.png");
         graphic = sprite;
         speed = -MathUtil.lerp(MIN_SPEED, MAX_SPEED, Math.random());
