@@ -4,6 +4,7 @@ import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
 import haxepunk.screen.UniformScaleMode;
 import scenes.*;
+import entities.*;
 
 class Main extends Engine
 {

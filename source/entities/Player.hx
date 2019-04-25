@@ -19,9 +19,9 @@ class Player extends Entity {
     public var heart(default, null):Spritemap;
     public var lives(default, null):Int;
     public var coins(default, null):Int;
+    public var isDead(default, null):Bool;
     private var shotCooldown:Alarm;
     private var sfx:Map<String, Sfx>;
-    private var isDead:Bool;
     private var invincibilityTimer:Alarm;
     private var age:Float;
 
@@ -157,16 +157,16 @@ class Player extends Entity {
         explode(23);
         sfx['playerdeath'].play();
         visible = false;
-        var resetTimer = new Alarm(1, TweenType.OneShot);
-        resetTimer.onComplete.bind(function() {
-            if(lives > 0) {
+        if(lives > 0) {
+            var resetTimer = new Alarm(1, TweenType.OneShot);
+            resetTimer.onComplete.bind(function() {
                 respawn();
-            }
-            else {
-                cast(HXP.scene, GameScene).restart();
-            }
-        });
-        addTween(resetTimer, true);
+            });
+            addTween(resetTimer, true);
+        }
+        else {
+            cast(scene, GameScene).gameOver();
+        }
     }
 
     private function respawn() {

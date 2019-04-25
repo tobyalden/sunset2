@@ -15,8 +15,19 @@ class HUD extends Entity {
     private var coinText:Text;
     private var coinIcon:Image;
     private var levelText:Text;
+    private var gameOver:Text;
     private var levelSubtitle:Text;
     private var fadeTimer:Alarm;
+
+    private var levelSubtitles:Map<Int, String> = [
+        1 => 'above the city \n a bird soars without a sound \n our tale begins here',
+        2 => 'the waves sound below \n wings grow damp with sea and salt \n we have far to go',
+        3 => 'the forest is old \n roots hold firm to warm soil \n and the air is clear',
+        4 => 'the city returns \n the sounds of conversation \n blend to a dull hum',
+        5 => 'the smell of ocean \n seaweed, driftwood, and tide pools \n we return once more',
+        6 => 'the forest, again \n leaves turn sun to pools of light \n our last time on earth',
+        7 => 'among the stars, now \n outside of time and meaning \n find love in this void!',
+    ];
 
     public function new(level:Int) {
         super(0, 0);
@@ -47,12 +58,20 @@ class HUD extends Entity {
         levelText.x = HXP.width / 2 - levelText.textWidth / 2;
         levelText.y = HXP.height / 2 - levelText.textHeight / 2;
 
-        levelSubtitle = new Text('a dream of dappled sunlight');
+        levelSubtitle = new Text(levelSubtitles[level]);
         levelSubtitle.smooth = false;
         levelSubtitle.size = 12;
         levelSubtitle.smooth = false;
         levelSubtitle.x = HXP.width / 2 - levelSubtitle.textWidth / 2;
         levelSubtitle.y = levelText.y + levelText.textHeight - 15;
+
+        gameOver = new Text('GAME OVER');
+        gameOver.smooth = false;
+        gameOver.size = 48;
+        gameOver.smooth = false;
+        gameOver.x = HXP.width / 2 - gameOver.textWidth / 2;
+        gameOver.y = HXP.height / 2 - gameOver.textHeight / 2;
+        gameOver.visible = false;
 
         addGraphic(lifeText);
         addGraphic(lifeIcon);
@@ -60,8 +79,13 @@ class HUD extends Entity {
         addGraphic(coinIcon);
         addGraphic(levelText);
         addGraphic(levelSubtitle);
+        addGraphic(gameOver);
         fadeTimer = new Alarm(3);
         addTween(fadeTimer, true);
+    }
+
+    public function displayGameOver() {
+        gameOver.visible = true;
     }
 
     override function update() {

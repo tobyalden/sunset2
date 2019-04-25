@@ -22,6 +22,7 @@ class GameScene extends Scene
     private var curtain:Curtain;
     private var background:Entity;
     private var player:Player;
+    private var hud:HUD;
     private var waveTimer:Alarm;
 
     private var instrumental:Sfx;
@@ -123,7 +124,8 @@ class GameScene extends Scene
         player = new Player(HXP.width / 2 - 8, HXP.height - 100);
         add(player);
 
-        add(new HUD(level));
+        hud = new HUD(level);
+        add(hud);
 
         waves = new Array<Array<Dynamic>>();
         for(i in 0...10) {
@@ -145,10 +147,14 @@ class GameScene extends Scene
         //drums.loop();
     }
 
-    public function restart() {
+    public function gameOver() {
         instrumental.stop();
         drums.stop();
-        HXP.scene = new GameScene(level);
+        var displayTimer = new Alarm(3, TweenType.OneShot);
+        displayTimer.onComplete.bind(function() {
+            hud.displayGameOver();
+        });
+        addTween(displayTimer, true);
     }
 
     private function getRandomEnemyName() {
