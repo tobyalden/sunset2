@@ -14,9 +14,13 @@ class HUD extends Entity {
     private var lifeIcon:Image;
     private var coinText:Text;
     private var coinIcon:Image;
+    private var levelText:Text;
+    private var levelSubtitle:Text;
+    private var fadeTimer:Alarm;
 
-    public function new() {
+    public function new(level:Int) {
         super(0, 0);
+        layer = -10;
 
         lifeText = new Text("?");
         lifeText.smooth = false;
@@ -36,10 +40,28 @@ class HUD extends Entity {
         coinIcon.x = coinText.x + coinText.width;
         coinIcon.y = 8;
 
+        levelText = new Text('LEVEL ${level}');
+        levelText.smooth = false;
+        levelText.size = 48;
+        levelText.smooth = false;
+        levelText.x = HXP.width / 2 - levelText.textWidth / 2;
+        levelText.y = HXP.height / 2 - levelText.textHeight / 2;
+
+        levelSubtitle = new Text('a dream of dappled sunlight');
+        levelSubtitle.smooth = false;
+        levelSubtitle.size = 12;
+        levelSubtitle.smooth = false;
+        levelSubtitle.x = HXP.width / 2 - levelSubtitle.textWidth / 2;
+        levelSubtitle.y = levelText.y + levelText.textHeight - 15;
+
         addGraphic(lifeText);
         addGraphic(lifeIcon);
         addGraphic(coinText);
         addGraphic(coinIcon);
+        addGraphic(levelText);
+        addGraphic(levelSubtitle);
+        fadeTimer = new Alarm(1.5);
+        addTween(fadeTimer, true);
     }
 
     override function update() {
@@ -50,5 +72,7 @@ class HUD extends Entity {
         coinText.text = '${cast(player, Player).coins}';
         coinText.x = lifeIcon.x + 25;
         coinIcon.x = coinText.x + coinText.width;
+        levelText.alpha = 1 - fadeTimer.percent;
+        levelSubtitle.alpha = 1 - fadeTimer.percent;
     }
 }

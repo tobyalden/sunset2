@@ -17,6 +17,7 @@ class GameScene extends Scene
 
     public var waves:Array<Array<Dynamic>>;
     public var waveCount:Int;
+    public var level:Int;
 
     private var background:Entity;
     private var player:Player;
@@ -24,6 +25,7 @@ class GameScene extends Scene
 
     private var instrumental:Sfx;
     private var drums:Sfx;
+
 
     static public var enemyPositions(default, null):Map<String, Entity>;
 
@@ -101,6 +103,11 @@ class GameScene extends Scene
         return enemyNames;
     }
 
+    public function new(level:Int) {
+        super();
+        this.level = level;
+    }
+
     override public function begin() {
         enemyPositions = new Map<String, Entity>();
         background = new Entity(
@@ -111,7 +118,7 @@ class GameScene extends Scene
         player = new Player(HXP.width / 2 - 8, HXP.height - 100);
         add(player);
 
-        add(new HUD());
+        add(new HUD(level));
 
         waves = new Array<Array<Dynamic>>();
         for(i in 0...10) {
@@ -125,19 +132,18 @@ class GameScene extends Scene
             sendWave();
         });
         addTween(waveTimer, true);
-        sendWave();
 
         instrumental = new Sfx("audio/instrumental.wav");
         drums = new Sfx("audio/drums.wav");
-        instrumental.play();
+        //instrumental.loop();
         drums.volume = 0;
-        drums.play();
+        //drums.loop();
     }
 
     public function restart() {
         instrumental.stop();
         drums.stop();
-        HXP.scene = new GameScene();
+        HXP.scene = new GameScene(level);
     }
 
     private function getRandomEnemyName() {
