@@ -57,11 +57,7 @@ class GameScene extends Scene
         var numEnemies = (
             trigger > 1 ? 1 : HXP.choose(1, 2)
         );
-        var enemyNameArray = new Array<String>();
-        for(num in 0...cast(numEnemies, Int)) {
-            enemyNameArray.push(getRandomEnemyName());
-        }
-        var enemyNames = enemyNameArray.join(',');
+        var enemyNames = getRandomEnemyNames(numEnemies);
         return [trigger, difficulty, enemyNames];
     }
 
@@ -72,12 +68,37 @@ class GameScene extends Scene
             trigger > 2 ? HXP.choose(0.5, 0.6, 0.7) : HXP.choose(0.8, 0.9, 1)
         );
         var numEnemies = HXP.choose(2, 3, 4);
+        var enemyNames = getRandomEnemyNames(numEnemies);
+        return [trigger, difficulty, enemyNames];
+    }
+
+    private function getHardWave():Array<Dynamic> {
+        // Enemy count trigger, difficulty, enemy list
+        var trigger = HXP.choose(2, 3, 4);
+        var difficulty = (
+            trigger > 2 ? HXP.choose(0.7, 0.8, 0.9) : 1
+        );
+        var numEnemies = HXP.choose(3, 4);
+
+        var enemyNames = getRandomEnemyNames(numEnemies);
+        return [trigger, difficulty, enemyNames];
+    }
+
+    private function getRandomEnemyNames(numEnemies:Int) {
         var enemyNameArray = new Array<String>();
-        for(num in 0...cast(numEnemies, Int)) {
-            enemyNameArray.push(getRandomEnemyName());
+        if(Math.random() < 0.5) {
+            var enemyName = getRandomEnemyName();
+            for(num in 0...cast(numEnemies, Int)) {
+                enemyNameArray.push(enemyName);
+            }
+        }
+        else {
+            for(num in 0...cast(numEnemies, Int)) {
+                enemyNameArray.push(getRandomEnemyName());
+            }
         }
         var enemyNames = enemyNameArray.join(',');
-        return [trigger, difficulty, enemyNames];
+        return enemyNames;
     }
 
     override public function begin() {
@@ -94,7 +115,7 @@ class GameScene extends Scene
 
         waves = new Array<Array<Dynamic>>();
         for(i in 0...10) {
-            waves.push(getNormalWave());
+            waves.push(getHardWave());
         }
         waves.push([0, 0, "boss"]);
         waveCount = 0;
@@ -108,9 +129,15 @@ class GameScene extends Scene
 
         instrumental = new Sfx("audio/instrumental.wav");
         drums = new Sfx("audio/drums.wav");
-        //instrumental.play();
+        instrumental.play();
         drums.volume = 0;
-        //drums.play();
+        drums.play();
+    }
+
+    public function restart() {
+        instrumental.stop();
+        drums.stop();
+        HXP.scene = new GameScene();
     }
 
     private function getRandomEnemyName() {

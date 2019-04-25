@@ -163,7 +163,7 @@ class Player extends Entity {
                 respawn();
             }
             else {
-                HXP.scene = new GameScene();
+                cast(HXP.scene, GameScene).restart();
             }
         });
         addTween(resetTimer, true);
