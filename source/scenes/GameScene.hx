@@ -153,6 +153,16 @@ class GameScene extends Scene
         var displayTimer = new Alarm(3, TweenType.OneShot);
         displayTimer.onComplete.bind(function() {
             hud.displayGameOver();
+            var fadeTimer = new Alarm(3, TweenType.OneShot);
+            fadeTimer.onComplete.bind(function() {
+                curtain.fadeOut();
+                var resetTimer = new Alarm(3, TweenType.OneShot);
+                resetTimer.onComplete.bind(function() {
+                    HXP.scene = new MainMenu();
+                });
+                addTween(resetTimer, true);
+            });
+            addTween(fadeTimer, true);
         });
         addTween(displayTimer, true);
     }
