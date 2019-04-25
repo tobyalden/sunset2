@@ -60,7 +60,7 @@ class HUD extends Entity {
         addGraphic(coinIcon);
         addGraphic(levelText);
         addGraphic(levelSubtitle);
-        fadeTimer = new Alarm(1.5);
+        fadeTimer = new Alarm(3);
         addTween(fadeTimer, true);
     }
 

@@ -19,6 +19,7 @@ class GameScene extends Scene
     public var waveCount:Int;
     public var level:Int;
 
+    private var curtain:Curtain;
     private var background:Entity;
     private var player:Player;
     private var waveTimer:Alarm;
@@ -109,6 +110,10 @@ class GameScene extends Scene
     }
 
     override public function begin() {
+        curtain = new Curtain(0, 0);
+        add(curtain);
+        curtain.fadeIn();
+
         enemyPositions = new Map<String, Entity>();
         background = new Entity(
             0, 0, new Backdrop('graphics/background.png')

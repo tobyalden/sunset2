@@ -30,7 +30,7 @@ class Main extends Engine
         Key.define("down", [Key.DOWN, Key.S]);
         Key.define("shoot", [Key.Z]);
         Key.define("bomb", [Key.X]);
-        HXP.scene = new GameScene(1);
+        HXP.scene = new MainMenu();
         gamepad = Gamepad.gamepad(0);
         Gamepad.onConnect.bind(function(newGamepad:Gamepad) {
             if(gamepad == null) {
@@ -175,6 +175,9 @@ class Main extends Engine
     }
 
     public static function getTimeFactor() {
+        if(Type.getClass(HXP.scene) != GameScene) {
+            return 1.0;
+        }
         if(!inputCheck("shoot")) {
             return 0.4;
         }
