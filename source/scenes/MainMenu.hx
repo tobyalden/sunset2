@@ -118,7 +118,7 @@ class MainMenu extends Scene {
             var resetTimer = new Alarm(2, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
                     clearTweens();
-                    HXP.scene = new GameScene(7);
+                    HXP.scene = new GameScene(1);
                 });
             addTween(resetTimer, true);
             canControl = false;

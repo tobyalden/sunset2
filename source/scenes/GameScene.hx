@@ -98,6 +98,16 @@ class GameScene extends Scene
         return [trigger, difficulty, enemyNames];
     }
 
+    private function getVeryHardWave():Array<Dynamic> {
+        // Enemy count trigger, difficulty, enemy list
+        var trigger = HXP.choose(3, 4);
+        var difficulty = 1;
+        var numEnemies = HXP.choose(4, 5);
+
+        var enemyNames = getRandomEnemyNames(numEnemies);
+        return [trigger, difficulty, enemyNames];
+    }
+
     private function getRandomEnemyNames(numEnemies:Int) {
         var enemyNameArray = new Array<String>();
         if(Math.random() < 0.5) {
@@ -162,7 +172,7 @@ class GameScene extends Scene
 
         waves = new Array<Array<Dynamic>>();
         for(i in 0...10) {
-            waves.push(getHardWave());
+            waves.push(getVeryHardWave());
         }
         waves.push([0, 0, "boss"]);
         waveCount = 0;
