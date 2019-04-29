@@ -73,6 +73,10 @@ class Enemy extends Entity {
         );
     }
 
+    public function isDead() {
+        return health < 0;
+    }
+
     public function takeHit() {
         health -= 1;
         flickerTimer.start();

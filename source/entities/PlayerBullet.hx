@@ -53,7 +53,11 @@ class PlayerBullet extends Entity {
             scene.remove(this);
         }
         var enemy = collide("enemy", x, y);
-        if(enemy != null) {
+        if(
+            enemy != null
+            && Type.getClass(enemy) != Boss
+            && !cast(enemy, Enemy).isDead()
+        ) {
             cast(enemy, Enemy).takeHit();
             die();
         }

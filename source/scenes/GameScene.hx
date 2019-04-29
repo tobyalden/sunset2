@@ -17,7 +17,7 @@ class GameScene extends Scene
 
     public var waves:Array<Array<Dynamic>>;
     public var waveCount:Int;
-    public var level:Int;
+    public var level(default, null):Int;
 
     private var curtain:Curtain;
     private var background:Entity;
@@ -171,9 +171,9 @@ class GameScene extends Scene
         add(hud);
 
         waves = new Array<Array<Dynamic>>();
-        for(i in 0...10) {
-            waves.push(getVeryHardWave());
-        }
+        //for(i in 0...10) {
+            //waves.push(getEasyWave());
+        //}
         waves.push([0, 0, "boss"]);
         waveCount = 0;
 
@@ -199,6 +199,21 @@ class GameScene extends Scene
                 Math.random() * HXP.height
             ));
         }
+    }
+
+    public function onBossDeath() {
+        instrumental.stop();
+        drums.stop();
+        var fadeTimer = new Alarm(5, TweenType.OneShot);
+        fadeTimer.onComplete.bind(function() {
+            curtain.fadeOut();
+            var resetTimer = new Alarm(3, TweenType.OneShot);
+            resetTimer.onComplete.bind(function() {
+                HXP.scene = new GameScene(level + 1);
+            });
+            addTween(resetTimer, true);
+        });
+        addTween(fadeTimer, true);
     }
 
     public function gameOver() {
@@ -246,7 +261,13 @@ class GameScene extends Scene
             if(enemy == "boss") {
                 var bossDelay = new Alarm(3, TweenType.OneShot);
                 bossDelay.onComplete.bind(function() {
-                    add(new Boss(HXP.width / 2 - 192 / 2, 0));
+                    var boss = new Boss(
+                        HXP.width / 2 - 192 / 2, 0, getTilesetName()
+                    );
+                    add(boss);
+                    for(port in boss.ports) {
+                        add(port);
+                    }
                 });
                 addTween(bossDelay, true);
             }

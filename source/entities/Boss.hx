@@ -30,17 +30,34 @@ class Boss extends Enemy {
     public static inline var SPRAY_PORT = 2;
     public static inline var EMPTY_PORT = 4;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var dropDistance:Float;
     private var dropTween:Alarm;
     private var slowShotTimer:Alarm;
     private var fastShotTimer:Alarm;
-    private var ports:Array<Int>;
+    private var portTypes:Array<Int>;
+    public var ports(default, null):Array<BossPort>;
+    private var spriteName:String;
 
-    public function new(x:Float, difficulty:Float) {
+    public function new(x:Float, difficulty:Float, spriteName:String) {
         super(x, -HEIGHT, HEALTH, difficulty);
-        mask = new Hitbox(192, HEIGHT);
-        sprite = new Image("graphics/boss.png");
+        layer = 3;
+        this.spriteName = spriteName;
+        if(spriteName == "space") {
+            mask = new Hitbox(192, 106);
+        }
+        else {
+            mask = new Hitbox(192, HEIGHT);
+        }
+        sprite = new Spritemap("graphics/bosses.png", 192, 120);
+        sprite.add("spaceslow", [0]);
+        sprite.add("space", [1]);
+        sprite.add("forestslow", [2, 3], 5);
+        sprite.add("forest", [4, 5], 5);
+        sprite.add("oceanslow", [6]);
+        sprite.add("ocean", [7]);
+        sprite.add("cityslow", [8]);
+        sprite.add("city", [9]);
         graphic = sprite;
         dropDistance = 24;
         dropTween = new Alarm(DROP_TIME, TweenType.OneShot);
@@ -75,50 +92,64 @@ class Boss extends Enemy {
         addTween(fastShotTimer);
 
         if(difficulty == 0) {
-            ports = [
+            portTypes = [
                 RING_PORT, SPRAY_PORT, RING_PORT,
                 SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
             ];
         }
         else {
-            ports = [
+            portTypes = [
                 EMPTY_PORT, EMPTY_PORT, EMPTY_PORT,
                 EMPTY_PORT, EMPTY_PORT, EMPTY_PORT
             ];
         }
 
         var portCount = 0;
-        for(port in ports) {
-            var portGraphic:Image;
-            if(port == EMPTY_PORT) {
-                portGraphic = new Image("graphics/bossportempty.png");
-            }
-            else {
-                portGraphic = new Image("graphics/bossport.png");
-            }
-            portGraphic.x = [24, 84, 144, 24, 84, 144][portCount];
-            portGraphic.y = [24, 24, 24, 72, 72, 72][portCount];
-            addGraphic(portGraphic);
+        ports = new Array<BossPort>();
+        for(portType in portTypes) {
+            var portX = [24, 84, 144, 24, 84, 144][portCount];
+            var portY = [24, 24, 24, 72, 72, 72][portCount];
+            ports.push(new BossPort(
+                portX, portY, spriteName, portType, this, difficulty
+            ));
             portCount++;
         }
     }
 
     override public function update() {
+        var suffix = Main.isSlowmo() ? "slow" : "";
+        sprite.play(spriteName + suffix);
         y = MathUtil.lerp(
             -HEIGHT, dropDistance, Ease.sineOut(dropTween.percent)
         );
+        var allPortsDead = true;
+        for(port in ports) {
+            if(!port.isDead()) {
+                allPortsDead = false;
+            }
+        }
+        if(allPortsDead) {
+            die();
+            cast(scene, GameScene).onBossDeath();
+            for(port in ports) {
+                port.kill();
+            }
+        }
         super.update();
     }
 
     private function slowShoot() {
         var portCount = 0;
-        for(port in ports) {
+        for(portType in portTypes) {
+            if(ports[portCount].isDead()) {
+                continue;
+            }
             var portX = [24, 84, 144, 24, 84, 144][portCount];
             var portY = [24, 24, 24, 72, 72, 72][portCount];
-            if(port == RING_PORT) {
+            if(portType == RING_PORT) {
                 shootRing(portX + x + 12, portY + y + 12);
             }
-            else if(port == SPRAY_PORT) {
+            else if(portType == SPRAY_PORT) {
                 shootSpray(portX + x + 12, portY + y + 12);
             }
             portCount++;
@@ -127,10 +158,13 @@ class Boss extends Enemy {
 
     private function fastShoot() {
         var portCount = 0;
-        for(port in ports) {
+        for(portType in portTypes) {
+            if(ports[portCount].isDead()) {
+                continue;
+            }
             var portX = [24, 84, 144, 24, 84, 144][portCount];
             var portY = [24, 24, 24, 72, 72, 72][portCount];
-            if(port == SPIRAL_PORT) {
+            if(portType == SPIRAL_PORT) {
                 shootSpiral(portX + x + 12, portY + y + 12);
             }
             portCount++;
