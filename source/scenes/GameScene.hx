@@ -9,7 +9,7 @@ import entities.*;
 
 class GameScene extends Scene
 {
-    public static inline var SCROLL_SPEED = 0.1;
+    public static inline var SCROLL_SPEED = 0.2;
     public static inline var TIME_BETWEEN_WAVES = 3;
     public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 1;
@@ -21,6 +21,7 @@ class GameScene extends Scene
 
     private var curtain:Curtain;
     private var background:Entity;
+    private var backgroundSlow:Entity;
     private var player:Player;
     private var hud:HUD;
     private var waveTimer:Alarm;
@@ -119,17 +120,40 @@ class GameScene extends Scene
         this.level = level;
     }
 
+    public function getTilesetName() {
+        if(level == 1 || level == 4) {
+            return 'city';
+        }
+        else if(level == 2 || level == 5) {
+            return 'ocean';
+        }
+        else if(level == 3 || level == 6) {
+            return 'forest';
+        }
+        else {
+            return 'space';
+        }
+    }
+
     override public function begin() {
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
 
         enemyPositions = new Map<String, Entity>();
+
         background = new Entity(
-            0, 0, new Backdrop('graphics/background.png')
+            0, 0, new Backdrop('graphics/${getTilesetName()}.png')
         );
         background.layer = 10;
         add(background);
+        background.visible = false;
+        backgroundSlow = new Entity(
+            0, 0, new Backdrop('graphics/${getTilesetName()}slow.png')
+        );
+        backgroundSlow.layer = 10;
+        add(backgroundSlow);
+
         player = new Player(HXP.width / 2 - 8, HXP.height - 100);
         add(player);
 
@@ -248,9 +272,9 @@ class GameScene extends Scene
 
     override public function update() {
         background.visible = !Main.isSlowmo();
-        background.y -= SCROLL_SPEED * Main.getDelta();
-        if(background.y > HXP.height) {
-            background.y -= HXP.height;
+        backgroundSlow.visible = Main.isSlowmo();
+        for(bg in [background, backgroundSlow]) {
+            bg.y += SCROLL_SPEED * Main.getDelta();
         }
 
         drums.volume = Main.isSlowmo() ? 0 : 1;
