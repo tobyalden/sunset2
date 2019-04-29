@@ -85,7 +85,7 @@ class Enemy extends Entity {
         explode(4);
         scene.remove(this); 
         GameScene.freeEnemyPosition(this);
-        for(i in 0...(3 + Random.randInt(3))) {
+        for(i in 0...(3 + Random.randInt(4))) {
             scene.add(new Coin(centerX, centerY));
         }
     }

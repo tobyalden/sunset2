@@ -52,6 +52,15 @@ class GameScene extends Scene
         return yPosition;
     }
 
+    private function getVeryEasyWave():Array<Dynamic> {
+        // Enemy count trigger, difficulty, enemy list
+        var trigger = HXP.choose(0, 1);
+        var difficulty = 0;
+        var numEnemies = HXP.choose(1, 2);
+        var enemyNames = getRandomEnemyNames(numEnemies);
+        return [trigger, difficulty, enemyNames];
+    }
+
     private function getEasyWave():Array<Dynamic> {
         // Enemy count trigger, difficulty, enemy list
         var trigger = HXP.choose(1, 2);

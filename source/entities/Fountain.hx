@@ -11,7 +11,7 @@ import scenes.*;
 
 class Fountain extends Enemy {
     public static inline var DROP_TIME = 1;
-    public static inline var HEALTH = 25;
+    public static inline var HEALTH = 37;
     public static inline var MIN_TIME_BETWEEN_SHOTS = 0.5;
     public static inline var MAX_TIME_BETWEEN_SHOTS = 2;
     public static inline var MIN_SHOT_SPEED = 0.1;
