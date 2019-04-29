@@ -84,22 +84,22 @@ class Fanmaker extends Enemy {
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,
-                0, 0.0001, EnemyBullet.BLUE_CIRCLE
+                0, 0.0001, EnemyBullet.NORMAL
             ));
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,
-                0, 0.000075, EnemyBullet.BLUE_CIRCLE
+                0, 0.000075, EnemyBullet.NORMAL
             ));
             if(difficulty > 0.5) {
                 scene.add(new EnemyBullet(
                     centerX, centerY, shotSpeed, shotAngle,
-                    0, 0.00005, EnemyBullet.BLUE_CIRCLE
+                    0, 0.00005, EnemyBullet.NORMAL
                 ));
             }
             if(difficulty > 0.75) {
                 scene.add(new EnemyBullet(
                     centerX, centerY, shotSpeed, shotAngle,
-                    0, 0.000025, EnemyBullet.BLUE_CIRCLE
+                    0, 0.000025, EnemyBullet.NORMAL
                 ));
             }
         }

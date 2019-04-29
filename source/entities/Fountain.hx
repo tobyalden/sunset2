@@ -80,15 +80,15 @@ class Fountain extends Enemy {
         scene.add(new EnemyBullet(
             centerX, centerY, -shotSpeed, shotAngle, 0,
             shotAccel + shotAccel / 5,
-            EnemyBullet.BLUE_CIRCLE
+            EnemyBullet.NORMAL
         ));
         scene.add(new EnemyBullet(
             centerX, centerY, -shotSpeed, shotAngle, 0.0001, shotAccel,
-            EnemyBullet.BLUE_CIRCLE
+            EnemyBullet.NORMAL
         ));
         scene.add(new EnemyBullet(
             centerX, centerY, -shotSpeed, shotAngle, -0.0001, shotAccel,
-            EnemyBullet.BLUE_CIRCLE
+            EnemyBullet.NORMAL
         ));
     }
 }

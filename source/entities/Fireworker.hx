@@ -79,7 +79,7 @@ class Fireworker extends Enemy {
         scene.add(new EnemyBullet(
             centerX, centerY, shotSpeed, shotAngle, 0,
             SHOT_ACCEL + Math.random() * SHOT_ACCEL,
-            EnemyBullet.BLUE_CIRCLE, shotSubroutine,
+            EnemyBullet.STAR, shotSubroutine,
             EnemyBullet.CONSTANT_INTERVAL
         ));
     }
@@ -109,7 +109,7 @@ class Fireworker extends Enemy {
             HXP.scene.add(new EnemyBullet(
                 parent.centerX, parent.centerY, SUBROUTINE_SHOT_SPEED,
                 spreadAngles[i], 0, 0,
-                EnemyBullet.YELLOW_CIRCLE
+                EnemyBullet.NORMAL
             ));
         }
         HXP.scene.remove(parent);

@@ -85,12 +85,12 @@ class Scatterer extends Enemy {
         scene.add(new EnemyBullet(
             centerX, centerY, shotSpeed, shotAngle,
             SHOT_ROTATION, SHOT_ACCEL,
-            EnemyBullet.BLUE_CIRCLE, shotSubroutine, subroutineInterval
+            EnemyBullet.STAR, shotSubroutine, subroutineInterval
         ));
         scene.add(new EnemyBullet(
             centerX, centerY, shotSpeed, shotAngle,
             -SHOT_ROTATION, SHOT_ACCEL,
-            EnemyBullet.BLUE_CIRCLE, shotSubroutine, subroutineInterval
+            EnemyBullet.STAR, shotSubroutine, subroutineInterval
         ));
     }
 
@@ -98,7 +98,7 @@ class Scatterer extends Enemy {
         HXP.scene.add(new EnemyBullet(
             parent.centerX, parent.centerY, 0,
             Math.random() * Math.PI - Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
-            EnemyBullet.YELLOW_CIRCLE
+            EnemyBullet.NORMAL
         ));
     }
 }

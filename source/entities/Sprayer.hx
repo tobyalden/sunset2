@@ -90,7 +90,7 @@ class Sprayer extends Enemy {
                 //0.0005 * (Math.random() - 0.5),
                 0,
                 0.0003 * Math.max(0.2, Math.random()),
-                EnemyBullet.BLUE_CIRCLE
+                EnemyBullet.NORMAL
             ));
         }
     }

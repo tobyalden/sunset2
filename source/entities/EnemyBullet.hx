@@ -9,18 +9,20 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 
 class EnemyBullet extends Entity {
-    public static inline var BLUE_CIRCLE = 0;
-    public static inline var YELLOW_CIRCLE = 1;
+    public static inline var NORMAL = 0;
+    public static inline var STAR = 1;
+
     public static inline var CONSTANT_INTERVAL = 0.0166666667;
 
     public var speed(default, null):Float;
     public var angle(default, null):Float;
     public var subroutineTimer(default, null):Alarm;
     private var startAngle:Float;
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var age:Float;
     private var rotation:Float;
     private var accel:Float;
+    private var bulletType:Int;
 
     public function setSpriteScale(newScale:Float) {
         sprite.scale = newScale;
@@ -39,16 +41,17 @@ class EnemyBullet extends Entity {
         this.startAngle = angle;
         this.rotation = rotation;
         this.accel = accel;
+        this.bulletType = bulletType;
         type = "enemybullet";
         mask = new Hitbox(4, 4, 3, 3);
 
-        if(bulletType == BLUE_CIRCLE) {
-            sprite = new Image("graphics/enemybullet.png");
-        }
-        else {
-            sprite = new Image("graphics/enemybullet2.png");
-        }
+        sprite = new Spritemap("graphics/enemybullets.png", 10, 10);
+        sprite.add("star", [0]);
+        sprite.add("normal", [1]);
+        sprite.add("starslow", [2]);
+        sprite.add("normalslow", [3]);
         graphic = sprite;
+        graphic.pixelSnapping = true;
         layer = -1;
 
         age = 0;
@@ -87,6 +90,15 @@ class EnemyBullet extends Entity {
                 1, 1.4, Ease.sineInOut(subroutineTimer.percent - 0.5)
             ));
         }
+
+        var prefix = bulletType == STAR ? "star" : "normal";
+        if(Main.isSlowmo()) {
+            sprite.play('${prefix}slow');
+        }
+        else {
+            sprite.play(prefix);
+        }
+
         super.update();
     }
 

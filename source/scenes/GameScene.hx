@@ -178,6 +178,17 @@ class GameScene extends Scene
         //instrumental.loop();
         drums.volume = 0;
         //drums.loop();
+
+        for(i in 0...40) {
+            add(new Cloud(
+                MathUtil.lerp(-25, 25, Math.random()),
+                Math.random() * HXP.height
+            ));
+            add(new Cloud(
+                MathUtil.lerp(240 - 50 - 25, 240 - 25, Math.random()),
+                Math.random() * HXP.height
+            ));
+        }
     }
 
     public function gameOver() {
