@@ -192,11 +192,15 @@ class GameScene extends Scene
         });
         addTween(waveTimer, true);
 
-        instrumental = new Sfx("audio/instrumental.wav");
-        drums = new Sfx("audio/drums.wav");
-        //instrumental.loop();
+        var musicLevel = level;
+        while(musicLevel > 3) {
+            musicLevel -= 3;
+        }
+        instrumental = new Sfx('audio/lvl${musicLevel}instrumental.wav');
+        drums = new Sfx('audio/lvl${musicLevel}drums.wav');
+        instrumental.loop();
         drums.volume = 0;
-        //drums.loop();
+        drums.loop();
 
         for(i in 0...40) {
             add(new Cloud(
