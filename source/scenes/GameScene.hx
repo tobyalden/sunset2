@@ -180,9 +180,57 @@ class GameScene extends Scene
         add(hud);
 
         waves = new Array<Array<Dynamic>>();
-        //for(i in 0...10) {
-            //waves.push(getEasyWave());
-        //}
+        if(level == 1) {
+            for(i in 0...10) {
+                waves.push(getVeryEasyWave());
+            }
+        }
+        else if(level == 2) {
+            for(i in 0...5) {
+                waves.push(getVeryEasyWave());
+            }
+            for(i in 0...5) {
+                waves.push(getEasyWave());
+            }
+            HXP.shuffle(waves);
+        }
+        else if(level == 3) {
+            for(i in 0...3) {
+                waves.push(getVeryEasyWave());
+            }
+            for(i in 0...7) {
+                waves.push(getEasyWave());
+            }
+            HXP.shuffle(waves);
+        }
+        else if(level == 4) {
+            for(i in 0...10) {
+                waves.push(getEasyWave());
+            }
+        }
+        else if(level == 5) {
+            for(i in 0...7) {
+                waves.push(getEasyWave());
+            }
+            for(i in 0...3) {
+                waves.push(getNormalWave());
+            }
+            HXP.shuffle(waves);
+        }
+        else if(level == 6) {
+            for(i in 0...5) {
+                waves.push(getEasyWave());
+            }
+            for(i in 0...5) {
+                waves.push(getNormalWave());
+            }
+            HXP.shuffle(waves);
+        }
+        else if(level == 7) {
+            for(i in 0...10) {
+                waves.push(getNormalWave());
+            }
+        }
         waves.push([0, 0, "boss"]);
         waveCount = 0;
 
@@ -272,8 +320,8 @@ class GameScene extends Scene
         var count = 0;
         for(enemy in enemyList) {
             if(enemy == "boss") {
-                //var bossDelay = new Alarm(3, TweenType.OneShot);
-                var bossDelay = new Alarm(0.1, TweenType.OneShot);
+                var bossDelay = new Alarm(3, TweenType.OneShot);
+                //var bossDelay = new Alarm(0.1, TweenType.OneShot);
                 bossDelay.onComplete.bind(function() {
                     var boss = new Boss(
                         HXP.width / 2 - 192 / 2,
