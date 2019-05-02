@@ -94,37 +94,37 @@ class Boss extends Enemy {
         if(level == 1) {
             portTypes = [
                 EMPTY_PORT, SPRAY_PORT, EMPTY_PORT,
-                SPIRAL_PORT, EMPTY_PORT, SPIRAL_PORT
+                RING_PORT, EMPTY_PORT, RING_PORT
             ];
         }
         else if(level == 2) {
             portTypes = [
-                EMPTY_PORT, RING_PORT, EMPTY_PORT,
-                SPRAY_PORT, EMPTY_PORT, SPRAY_PORT
+                SPRAY_PORT, SPRAY_PORT, SPRAY_PORT,
+                SPRAY_PORT, SPRAY_PORT, SPRAY_PORT
             ];
         }
         else if(level == 3) {
             portTypes = [
-                RING_PORT, SPRAY_PORT, RING_PORT,
-                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+                RING_PORT, EMPTY_PORT, RING_PORT,
+                SPIRAL_PORT, EMPTY_PORT, SPIRAL_PORT
             ];
         }
         else if(level == 4) {
             portTypes = [
-                RING_PORT, SPRAY_PORT, RING_PORT,
-                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+                SPRAY_PORT, RING_PORT, SPRAY_PORT,
+                RING_PORT, SPRAY_PORT, RING_PORT
             ];
         }
         else if(level == 5) {
             portTypes = [
-                RING_PORT, SPRAY_PORT, RING_PORT,
-                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+                SPRAY_PORT, SPRAY_PORT, SPRAY_PORT,
+                SPRAY_PORT, SPRAY_PORT, SPRAY_PORT
             ];
         }
         else if(level == 6) {
             portTypes = [
-                RING_PORT, SPRAY_PORT, RING_PORT,
-                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+                RING_PORT, RING_PORT, RING_PORT,
+                SPIRAL_PORT, SPIRAL_PORT, SPIRAL_PORT
             ];
         }
         else if(level == 7) {
