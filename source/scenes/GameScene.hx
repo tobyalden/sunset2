@@ -14,6 +14,15 @@ class GameScene extends Scene
     public static inline var ENEMIES_PER_WAVE = 1;
     public static inline var MAX_ENEMIES = 1;
 
+    public static var bossDifficultiesByLevel:Map<Int, Float> = [
+        1 => 0,
+        2 => 0.1,
+        3 => 0.2,
+        4 => 0.3,
+        5 => 0.4,
+        6 => 0.5,
+        7 => 0.6
+    ];
 
     public var waves:Array<Array<Dynamic>>;
     public var waveCount:Int;
@@ -259,14 +268,20 @@ class GameScene extends Scene
         var count = 0;
         for(enemy in enemyList) {
             if(enemy == "boss") {
-                var bossDelay = new Alarm(3, TweenType.OneShot);
+                //var bossDelay = new Alarm(3, TweenType.OneShot);
+                var bossDelay = new Alarm(0.1, TweenType.OneShot);
                 bossDelay.onComplete.bind(function() {
                     var boss = new Boss(
-                        HXP.width / 2 - 192 / 2, 0, getTilesetName()
+                        HXP.width / 2 - 192 / 2,
+                        bossDifficultiesByLevel[level],
+                        getTilesetName(),
+                        level
                     );
                     add(boss);
                     for(port in boss.ports) {
-                        add(port);
+                        if(port != null) {
+                            add(port);
+                        }
                     }
                 });
                 addTween(bossDelay, true);

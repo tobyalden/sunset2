@@ -11,7 +11,7 @@ import scenes.*;
 
 class BossPort extends Enemy {
     public static inline var SIZE = 24;
-    public static inline var HEALTH = 20;
+    public static inline var HEALTH = 50;
 
     private var sprite:Spritemap;
     private var spriteName:String;
@@ -24,7 +24,8 @@ class BossPort extends Enemy {
         x:Int, y:Int, spriteName:String, portType:Int, boss:Boss,
         difficulty:Float
     ) {
-        super(x - 5, y - 5, HEALTH, difficulty);
+        var health = MathUtil.ilerp(HEALTH, HEALTH * 2, difficulty);
+        super(x - 5, y - 5, health, difficulty);
         layer = 2;
         this.startX = x;
         this.startY = y;

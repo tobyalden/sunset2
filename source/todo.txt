@@ -1,13 +1,9 @@
-- makes sure bullets are centered
-- add separate levels
-- add backgrounds
-- add one more enemy
-- add bosses
-- add main menu
-- add sfx
+- design bosses
+- add sfx for enemy and boss port death
+- add sfx for boss death
+- add sfx for extra life
+- add in coin and HUD graphics
 - add music
+- add continue function
 - add ending
-- add scoring
-- add items that drop out of enemies on death
-- add lives
-- add game over
+- add new game+

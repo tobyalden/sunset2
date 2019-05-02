@@ -39,7 +39,7 @@ class Boss extends Enemy {
     public var ports(default, null):Array<BossPort>;
     private var spriteName:String;
 
-    public function new(x:Float, difficulty:Float, spriteName:String) {
+    public function new(x:Float, difficulty:Float, spriteName:String, level:Int) {
         super(x, -HEIGHT, HEALTH, difficulty);
         layer = 3;
         this.spriteName = spriteName;
@@ -91,7 +91,43 @@ class Boss extends Enemy {
         });
         addTween(fastShotTimer);
 
-        if(difficulty == 0) {
+        if(level == 1) {
+            portTypes = [
+                EMPTY_PORT, SPRAY_PORT, EMPTY_PORT,
+                SPIRAL_PORT, EMPTY_PORT, SPIRAL_PORT
+            ];
+        }
+        else if(level == 2) {
+            portTypes = [
+                EMPTY_PORT, RING_PORT, EMPTY_PORT,
+                SPRAY_PORT, EMPTY_PORT, SPRAY_PORT
+            ];
+        }
+        else if(level == 3) {
+            portTypes = [
+                RING_PORT, SPRAY_PORT, RING_PORT,
+                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+            ];
+        }
+        else if(level == 4) {
+            portTypes = [
+                RING_PORT, SPRAY_PORT, RING_PORT,
+                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+            ];
+        }
+        else if(level == 5) {
+            portTypes = [
+                RING_PORT, SPRAY_PORT, RING_PORT,
+                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+            ];
+        }
+        else if(level == 6) {
+            portTypes = [
+                RING_PORT, SPRAY_PORT, RING_PORT,
+                SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
+            ];
+        }
+        else if(level == 7) {
             portTypes = [
                 RING_PORT, SPRAY_PORT, RING_PORT,
                 SPIRAL_PORT, SPRAY_PORT, SPIRAL_PORT
@@ -109,9 +145,14 @@ class Boss extends Enemy {
         for(portType in portTypes) {
             var portX = [24, 84, 144, 24, 84, 144][portCount];
             var portY = [24, 24, 24, 72, 72, 72][portCount];
-            ports.push(new BossPort(
-                portX, portY, spriteName, portType, this, difficulty
-            ));
+            if(portType == EMPTY_PORT) {
+                ports.push(null);
+            }
+            else {
+                ports.push(new BossPort(
+                    portX, portY, spriteName, portType, this, difficulty
+                ));
+            }
             portCount++;
         }
     }
@@ -124,6 +165,9 @@ class Boss extends Enemy {
         );
         var allPortsDead = true;
         for(port in ports) {
+            if(port == null) {
+                continue;
+            }
             if(!port.isDead()) {
                 allPortsDead = false;
             }
@@ -132,6 +176,9 @@ class Boss extends Enemy {
             die();
             cast(scene, GameScene).onBossDeath();
             for(port in ports) {
+                if(port == null) {
+                    continue;
+                }
                 port.kill();
             }
         }
@@ -141,7 +188,8 @@ class Boss extends Enemy {
     private function slowShoot() {
         var portCount = 0;
         for(portType in portTypes) {
-            if(ports[portCount].isDead()) {
+            if(ports[portCount] == null || ports[portCount].isDead()) {
+                portCount++;
                 continue;
             }
             var portX = [24, 84, 144, 24, 84, 144][portCount];
@@ -159,7 +207,8 @@ class Boss extends Enemy {
     private function fastShoot() {
         var portCount = 0;
         for(portType in portTypes) {
-            if(ports[portCount].isDead()) {
+            if(ports[portCount] == null || ports[portCount].isDead()) {
+                portCount++;
                 continue;
             }
             var portX = [24, 84, 144, 24, 84, 144][portCount];
@@ -202,7 +251,9 @@ class Boss extends Enemy {
         for(i in 0...bulletsPerShot) {
             // Circular shot
             var spreadAngles = getSpreadAngles(bulletsPerShot, Math.PI * 2);
-            var shotAngle = getAngleTowardsPlayer() + spreadAngles[i];
+            var shotAngle = getAngleTowardsPlayerForPort(
+                shotOriginX, shotOriginY
+            ) + spreadAngles[i];
             var shotSpeed = MathUtil.lerp(
                 MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
@@ -224,7 +275,9 @@ class Boss extends Enemy {
             var sprayAngles = getSprayAngles(
                 bulletsPerShot, Math.PI * 2 / spread
             );
-            var shotAngle = getAngleTowardsPlayer() + sprayAngles[i];
+            var shotAngle = getAngleTowardsPlayerForPort(
+                shotOriginX, shotOriginY
+            ) + sprayAngles[i];
             var shotSpeed = MathUtil.lerp(
                 MIN_SHOT_SPEED, MAX_SHOT_SPEED, difficulty
             );
