@@ -18,6 +18,7 @@ class Enemy extends Entity {
     private var flickerTimer:Alarm;
     private var age:Float;
     private var difficulty:Float;
+    private var sfx:Map<String, Sfx>;
 
     public function new(x:Float, y:Float, health:Int, difficulty:Float) {
         super(x, y);
@@ -26,6 +27,11 @@ class Enemy extends Entity {
         flickerTimer = new Alarm(FLICKER_DURATION, TweenType.Persist);
         addTween(flickerTimer);
         age = 0;
+        sfx = [
+            'enemydeath1' => new Sfx('audio/enemydeath1.wav'),
+            'enemydeath2' => new Sfx('audio/enemydeath2.wav'),
+            'enemydeath3' => new Sfx('audio/enemydeath3.wav')
+        ];
     }
 
     override public function update() {
@@ -93,6 +99,9 @@ class Enemy extends Entity {
     }
 
     private function die() {
+        if(Type.getClass(this) != BossPort && Type.getClass(this) != Boss) {
+            sfx['enemydeath${HXP.choose(1, 2, 3)}'].play();
+        }
         explode(4);
         scene.remove(this); 
         GameScene.freeEnemyPosition(this);

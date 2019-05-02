@@ -55,6 +55,7 @@ class BossPort extends Enemy {
     }
 
     override private function die() {
+        sfx['enemydeath${HXP.choose(1, 2, 3)}'].play();
         explode(4);
     }
 

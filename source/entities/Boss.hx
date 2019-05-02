@@ -38,6 +38,7 @@ class Boss extends Enemy {
     private var portTypes:Array<Int>;
     public var ports(default, null):Array<BossPort>;
     private var spriteName:String;
+    private var deathSfx:Sfx;
 
     public function new(x:Float, difficulty:Float, spriteName:String, level:Int) {
         super(x, -HEIGHT, HEALTH, difficulty);
@@ -155,6 +156,8 @@ class Boss extends Enemy {
             }
             portCount++;
         }
+
+        deathSfx = new Sfx("audio/bossdeath.wav");
     }
 
     override public function update() {
@@ -174,6 +177,8 @@ class Boss extends Enemy {
         }
         if(allPortsDead) {
             die();
+            explode(300);
+            deathSfx.play();
             cast(scene, GameScene).onBossDeath();
             for(port in ports) {
                 if(port == null) {
@@ -183,6 +188,38 @@ class Boss extends Enemy {
             }
         }
         super.update();
+    }
+
+    override private function explode(numExplosions:Int) {
+        var directions = new Array<Vector2>();
+        for(i in 0...numExplosions) {
+            var angle = (2 / numExplosions) * i;
+            directions.push(
+                new Vector2(Math.cos(angle), Math.sin(angle))
+            );
+            directions.push(
+                new Vector2(-Math.cos(angle), Math.sin(angle))
+            );
+            directions.push(
+                new Vector2(Math.cos(angle), -Math.sin(angle))
+            );
+            directions.push(
+                new Vector2(-Math.cos(angle), -Math.sin(angle))
+            );
+        }
+        var count = 0;
+        for(direction in directions) {
+            direction.scale(1.6 * Math.random());
+            direction.normalize(
+                Math.max(0.2 + 0.3 * Math.random(), direction.length)
+            );
+            var explosion = new Explosion(
+                centerX, centerY, directions[count]
+            );
+            explosion.layer = -99;
+            scene.add(explosion);
+            count++;
+        }
     }
 
     private function slowShoot() {

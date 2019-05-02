@@ -1,4 +1,5 @@
 - design bosses
+- add "press Z to start" prompt
 - add sfx for enemy and boss port death
 - add sfx for boss death
 - add sfx for extra life
