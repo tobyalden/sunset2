@@ -15,13 +15,10 @@ class GameScene extends Scene
     public static inline var MAX_ENEMIES = 1;
 
     public static var bossDifficultiesByLevel:Map<Int, Float> = [
-        1 => 0,
-        2 => 0.1,
-        3 => 0.2,
-        4 => 0.3,
-        5 => 0.8,
-        6 => 0.5,
-        7 => 0.6
+        1 => 0.1,
+        2 => 0.3,
+        3 => 0.8,
+        4 => 1
     ];
 
     public var waves:Array<Array<Dynamic>>;
@@ -141,13 +138,13 @@ class GameScene extends Scene
     }
 
     public function getTilesetName() {
-        if(level == 1 || level == 4) {
+        if(level == 1) {
             return 'city';
         }
-        else if(level == 2 || level == 5) {
+        else if(level == 2) {
             return 'ocean';
         }
-        else if(level == 3 || level == 6) {
+        else if(level == 3) {
             return 'forest';
         }
         else {
@@ -180,7 +177,7 @@ class GameScene extends Scene
         hud = new HUD(level);
         add(hud);
 
-        isHardMode = true;
+        isHardMode = false;
         waves = new Array<Array<Dynamic>>();
         if(isHardMode) {
             for(i in 0...10) {
@@ -188,54 +185,34 @@ class GameScene extends Scene
             }
         }
         else if(level == 1) {
-            for(i in 0...10) {
+            for(i in 0...6) {
                 waves.push(getVeryEasyWave());
             }
-        }
-        else if(level == 2) {
-            for(i in 0...5) {
-                waves.push(getVeryEasyWave());
-            }
-            for(i in 0...5) {
+            for(i in 0...6) {
                 waves.push(getEasyWave());
             }
             HXP.shuffle(waves);
         }
+        else if(level == 2) {
+            for(i in 0...9) {
+                waves.push(getEasyWave());
+            }
+            for(i in 0...4) {
+                waves.push(getNormalWave());
+            }
+        }
         else if(level == 3) {
-            for(i in 0...3) {
-                waves.push(getVeryEasyWave());
+            for(i in 0...6) {
+                waves.push(getEasyWave());
             }
             for(i in 0...7) {
-                waves.push(getEasyWave());
+                waves.push(getNormalWave());
             }
             HXP.shuffle(waves);
         }
         else if(level == 4) {
             for(i in 0...10) {
-                waves.push(getEasyWave());
-            }
-        }
-        else if(level == 5) {
-            for(i in 0...7) {
-                waves.push(getEasyWave());
-            }
-            for(i in 0...3) {
-                waves.push(getNormalWave());
-            }
-            HXP.shuffle(waves);
-        }
-        else if(level == 6) {
-            for(i in 0...5) {
-                waves.push(getEasyWave());
-            }
-            for(i in 0...5) {
-                waves.push(getNormalWave());
-            }
-            HXP.shuffle(waves);
-        }
-        else if(level == 7) {
-            for(i in 0...10) {
-                waves.push(getNormalWave());
+                //waves.push(getNormalWave());
             }
         }
         waves.push([0, 0, "boss"]);
@@ -248,45 +225,52 @@ class GameScene extends Scene
         addTween(waveTimer, true);
 
         var musicLevel = level;
-        while(musicLevel > 3) {
-            musicLevel -= 3;
-        }
         instrumental = new Sfx('audio/lvl${musicLevel}instrumental.wav');
         drums = new Sfx('audio/lvl${musicLevel}drums.wav');
         instrumental.loop();
         drums.volume = 0;
         drums.loop();
 
-        for(i in 0...40) {
-            add(new Cloud(
-                MathUtil.lerp(-25, 25, Math.random()),
-                Math.random() * HXP.height
-            ));
-            add(new Cloud(
-                MathUtil.lerp(240 - 50 - 25, 240 - 25, Math.random()),
-                Math.random() * HXP.height
-            ));
+        if(level != 4) {
+            for(i in 0...40) {
+                add(new Cloud(
+                    MathUtil.lerp(-25, 25, Math.random()),
+                    Math.random() * HXP.height
+                ));
+                add(new Cloud(
+                    MathUtil.lerp(240 - 50 - 25, 240 - 25, Math.random()),
+                    Math.random() * HXP.height
+                ));
+            }
         }
     }
 
     public function onBossDeath() {
-        instrumental.stop();
-        drums.stop();
+        stopAllMusic();
         var fadeTimer = new Alarm(5, TweenType.OneShot);
         fadeTimer.onComplete.bind(function() {
             curtain.fadeOut();
             var resetTimer = new Alarm(3, TweenType.OneShot);
             resetTimer.onComplete.bind(function() {
-                HXP.scene = new GameScene(level + 1);
+                if(level < 4) {
+                    HXP.scene = new GameScene(level + 1);
+                }
+                else {
+                    HXP.scene = new MainMenu();
+                }
             });
             addTween(resetTimer, true);
         });
         addTween(fadeTimer, true);
     }
 
-    public function gameOver() {
+    public function stopAllMusic() {
         instrumental.stop();
         drums.stop();
+    }
+
+    public function gameOver() {
+        stopAllMusic();
         var displayTimer = new Alarm(3, TweenType.OneShot);
         displayTimer.onComplete.bind(function() {
             hud.displayGameOver();

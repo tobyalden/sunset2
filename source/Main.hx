@@ -31,7 +31,7 @@ class Main extends Engine
         Key.define("down", [Key.DOWN, Key.S]);
         Key.define("shoot", [Key.Z]);
         Key.define("bomb", [Key.X]);
-        HXP.scene = new MainMenu();
+        HXP.scene = new GameScene(4);
         gamepad = Gamepad.gamepad(0);
         Gamepad.onConnect.bind(function(newGamepad:Gamepad) {
             if(gamepad == null) {

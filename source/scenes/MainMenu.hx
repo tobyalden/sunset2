@@ -72,6 +72,10 @@ class MainMenu extends Scene {
         startSound = new Sfx("audio/menustart.wav");
     }
 
+    public function stopAllMusic() {
+        //music.stop();
+    }
+
     override public function update() {
         if(canControl && Main.inputCheck("up")) {
             if(!cursorPause.active) {
@@ -124,6 +128,7 @@ class MainMenu extends Scene {
             canControl = false;
             curtain.fadeOut();
             startSound.play();
+            stopAllMusic();
         }
         super.update();
     }
