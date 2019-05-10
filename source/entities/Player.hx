@@ -61,7 +61,8 @@ class Player extends Entity {
             'coin4' => new Sfx('audio/coin4.wav'),
             'coin5' => new Sfx('audio/coin5.wav'),
             'playerdeath' => new Sfx('audio/playerdeath.wav'),
-            'respawn' => new Sfx('audio/respawn.wav')
+            'respawn' => new Sfx('audio/respawn.wav'),
+            'extralife' => new Sfx('audio/extralife.wav')
         ];
 
         isDead = false;
@@ -116,6 +117,7 @@ class Player extends Entity {
         }
 
         if(coins >= 100) {
+            sfx['extralife'].play();
             coins -= 100;
             lives++;
         }

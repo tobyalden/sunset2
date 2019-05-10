@@ -212,7 +212,7 @@ class GameScene extends Scene
         }
         else if(level == 4) {
             for(i in 0...10) {
-                //waves.push(getNormalWave());
+                waves.push(getNormalWave());
             }
         }
         waves.push([0, 0, "boss"]);
@@ -253,6 +253,7 @@ class GameScene extends Scene
             var resetTimer = new Alarm(3, TweenType.OneShot);
             resetTimer.onComplete.bind(function() {
                 if(level < 4) {
+                    MainMenu.continueFrom = level + 1;
                     HXP.scene = new GameScene(level + 1);
                 }
                 else {

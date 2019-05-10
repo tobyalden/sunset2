@@ -90,12 +90,19 @@ class HUD extends Entity {
 
     override function update() {
         var player = scene.getInstance("player");
-        lifeText.text = '${cast(player, Player).lives}';
-        lifeIcon.x = lifeText.x + lifeText.width;
 
+        lifeIcon.x = 5;
+        lifeIcon.y = 8;
+        lifeText.text = '${cast(player, Player).lives}';
+        lifeText.x = lifeIcon.x + 19;
+        //lifeText.y = 8;
+
+        coinIcon.x = 50;
+        coinIcon.y = 8;
         coinText.text = '${cast(player, Player).coins}';
-        coinText.x = lifeIcon.x + 25;
-        coinIcon.x = coinText.x + coinText.width;
+        coinText.x = coinIcon.x + 19;
+        //coinText.y = 8;
+
         levelText.alpha = 1 - fadeTimer.percent;
         levelSubtitle.alpha = 1 - fadeTimer.percent;
     }

@@ -15,6 +15,10 @@ class MainMenu extends Scene {
     public static inline var BOB_AMOUNT = 0.25;
     public static inline var BOB_SPEED = 0.23;
 
+    public static var continueFrom:Int = 1;
+
+    private var title:Image;
+
     private var startText:Text;
     private var continueText:Text;
 
@@ -29,7 +33,26 @@ class MainMenu extends Scene {
     private var selectSound:Sfx;
     private var startSound:Sfx;
 
+    private var background:Entity;
+    private var music:Sfx;
+    private var fromPrompt:Bool;
+
+    public function new(fromPrompt:Bool = false) {
+        super();
+        this.fromPrompt = fromPrompt;
+    }
+
     override public function begin() {
+        music = new Sfx("audio/mainmenu.wav");
+        music.loop();
+        title = new Image("graphics/titlescreen.png");
+        background = new Entity(
+            0, 0, new Backdrop('graphics/titlebackground.png')
+        );
+        background.layer = 10;
+        add(background);
+
+        addGraphic(title);
         startText = new Text("START");
         startText.smooth = false;
         startText.size = 24;
@@ -72,11 +95,8 @@ class MainMenu extends Scene {
         startSound = new Sfx("audio/menustart.wav");
     }
 
-    public function stopAllMusic() {
-        //music.stop();
-    }
-
     override public function update() {
+        background.y += GameScene.SCROLL_SPEED * Main.getDelta();
         if(canControl && Main.inputCheck("up")) {
             if(!cursorPause.active) {
                 if(cursorPosition > 0) {
@@ -119,16 +139,17 @@ class MainMenu extends Scene {
                 }
             });
             addTween(flasher, true);
+            var levelToStartFrom = cursorPosition == 0 ? 1 : continueFrom;
             var resetTimer = new Alarm(2, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
                     clearTweens();
-                    HXP.scene = new GameScene(1);
+                    HXP.scene = new GameScene(continueFrom);
                 });
             addTween(resetTimer, true);
             canControl = false;
             curtain.fadeOut();
+            music.stop();
             startSound.play();
-            stopAllMusic();
         }
         super.update();
     }
