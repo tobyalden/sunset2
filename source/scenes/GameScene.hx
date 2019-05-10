@@ -253,8 +253,11 @@ class GameScene extends Scene
             var resetTimer = new Alarm(3, TweenType.OneShot);
             resetTimer.onComplete.bind(function() {
                 if(level < 4) {
-                    MainMenu.continueFrom = level + 1;
-                    HXP.scene = new GameScene(level + 1);
+                    var newLevel = level + 1;
+                    if(newLevel > MainMenu.continueFrom) {
+                        MainMenu.continueFrom = newLevel;
+                    }
+                    HXP.scene = new GameScene(newLevel);
                 }
                 else {
                     HXP.scene = new MainMenu();
