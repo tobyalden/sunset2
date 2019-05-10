@@ -85,7 +85,7 @@ class Treemaker extends Enemy {
         );
         scene.add(new EnemyBullet(
             centerX, centerY, SHOT_SPEED, shotAngle, 0, SHOT_ACCEL,
-            EnemyBullet.STAR, shotSubroutine, subroutineInterval
+            EnemyBullet.ALT_STAR, shotSubroutine, subroutineInterval
         ));
     }
 
@@ -97,12 +97,12 @@ class Treemaker extends Enemy {
         HXP.scene.add(new EnemyBullet(
             parent.centerX, parent.centerY, subroutineShotSpeed,
             parent.angle + Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
-            EnemyBullet.NORMAL
+            EnemyBullet.ALT
         ));
         HXP.scene.add(new EnemyBullet(
             parent.centerX, parent.centerY, subroutineShotSpeed,
             parent.angle - Math.PI / 2, 0, SUBROUTINE_SHOT_ACCEL,
-            EnemyBullet.NORMAL
+            EnemyBullet.ALT
         ));
     }
 }

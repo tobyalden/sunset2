@@ -1,7 +1,9 @@
-- add "press Z to start" prompt
-- add sfx for extra life
-- add in coin and HUD graphics
-- add music
 - add continue function
+- add sfx for extra life
+- add title screen
+- add rest of music
+- add new forest background
+
+- add "press Z to start" prompt
 - add ending
 - add new game+

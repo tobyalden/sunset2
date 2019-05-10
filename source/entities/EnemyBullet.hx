@@ -11,6 +11,8 @@ import haxepunk.utils.*;
 class EnemyBullet extends Entity {
     public static inline var NORMAL = 0;
     public static inline var STAR = 1;
+    public static inline var ALT = 2;
+    public static inline var ALT_STAR = 3;
 
     public static inline var CONSTANT_INTERVAL = 0.0166666667;
 
@@ -50,6 +52,10 @@ class EnemyBullet extends Entity {
         sprite.add("normal", [1]);
         sprite.add("starslow", [2]);
         sprite.add("normalslow", [3]);
+        sprite.add("altstar", [4]);
+        sprite.add("alt", [5]);
+        sprite.add("altstarslow", [6]);
+        sprite.add("altslow", [7]);
         graphic = sprite;
         graphic.pixelSnapping = true;
         layer = -1;
@@ -91,12 +97,22 @@ class EnemyBullet extends Entity {
             ));
         }
 
-        var prefix = bulletType == STAR ? "star" : "normal";
+        var bulletName = "normal";
+        if(bulletType == STAR) {
+            bulletName = "star";
+        }
+        else if(bulletType == ALT) {
+            bulletName = "alt";
+        }
+        else if(bulletType == ALT_STAR) {
+            bulletName = "altstar";
+        }
+
         if(Main.isSlowmo()) {
-            sprite.play('${prefix}slow');
+            sprite.play('${bulletName}slow');
         }
         else {
-            sprite.play(prefix);
+            sprite.play(bulletName);
         }
 
         super.update();

@@ -80,7 +80,7 @@ class Spiralshot extends Enemy {
             );
             scene.add(new EnemyBullet(
                 centerX, centerY, shotSpeed, shotAngle,
-                0, 0.0001, EnemyBullet.NORMAL
+                0, 0.0001, EnemyBullet.ALT
             ));
         }
     }

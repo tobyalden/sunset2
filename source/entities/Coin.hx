@@ -17,6 +17,7 @@ class Coin extends Entity {
     public static inline var MAX_ACCEL = 0.0002;
 
     private var sprite:Image;
+    private var spriteSlow:Image;
     private var speed:Float;
     private var spread:Float;
     private var accel:Float;
@@ -26,6 +27,7 @@ class Coin extends Entity {
         type = "coin";
         mask = new Hitbox(22, 22, -6, -6);
         sprite = new Image("graphics/coin.png");
+        spriteSlow = new Image("graphics/coinslow.png");
         graphic = sprite;
         speed = -MathUtil.lerp(MIN_SPEED, MAX_SPEED, Math.random());
         accel = MathUtil.lerp(MIN_ACCEL, MAX_ACCEL, Math.random());
@@ -33,6 +35,7 @@ class Coin extends Entity {
     }
 
     override function update() {
+        graphic = Main.isSlowmo() ? spriteSlow : sprite;
         speed += accel * Main.getDelta();
         var velocity = new Vector2(spread, speed);
         moveBy(

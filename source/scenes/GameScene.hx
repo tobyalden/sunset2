@@ -37,6 +37,7 @@ class GameScene extends Scene
 
     private var instrumental:Sfx;
     private var drums:Sfx;
+    private var isHardMode:Bool;
 
 
     static public var enemyPositions(default, null):Map<String, Entity>;
@@ -179,8 +180,14 @@ class GameScene extends Scene
         hud = new HUD(level);
         add(hud);
 
+        isHardMode = true;
         waves = new Array<Array<Dynamic>>();
-        if(level == 1) {
+        if(isHardMode) {
+            for(i in 0...10) {
+                waves.push(getHardWave());
+            }
+        }
+        else if(level == 1) {
             for(i in 0...10) {
                 waves.push(getVeryEasyWave());
             }
@@ -325,7 +332,7 @@ class GameScene extends Scene
                 bossDelay.onComplete.bind(function() {
                     var boss = new Boss(
                         HXP.width / 2 - 192 / 2,
-                        bossDifficultiesByLevel[level],
+                        isHardMode ? 1 : bossDifficultiesByLevel[level],
                         getTilesetName(),
                         level
                     );

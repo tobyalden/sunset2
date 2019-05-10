@@ -91,7 +91,7 @@ class Litterer extends Enemy {
         );
         scene.add(new EnemyBullet(
             centerX, centerY, shotSpeed, shotAngle, 0, SHOT_ACCEL,
-            EnemyBullet.STAR, shotSubroutine, subroutineInterval
+            EnemyBullet.ALT_STAR, shotSubroutine, subroutineInterval
         ));
     }
 
@@ -102,7 +102,7 @@ class Litterer extends Enemy {
         scene.add(new EnemyBullet(
             parent.centerX, parent.centerY, 0,
             getAngleTowardsPlayer(), 0, SUBROUTINE_SHOT_ACCEL,
-            EnemyBullet.NORMAL
+            EnemyBullet.ALT
         ));
     }
 }
